@@ -1,0 +1,407 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-dbml-generator"
+}
+
+datasource db {
+  provider = "mysql" // or "mysql", "sqlite", etc.
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum ReminderChannel {
+  WHATSAPP
+  EMAIL
+  PUSH_NOTIFICATION
+  SMS
+}
+
+enum ReminderTriggerType {
+  BEFORE
+  AFTER
+}
+
+enum ReminderStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+enum RepeatInterval {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum GroupStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+enum GroupType {
+  PRIVATE
+  PUBLIC
+}
+
+enum IdeaStatus {
+  DRAFT
+  ACTIVE
+  UNDER_REVIEW
+  APPROVED
+  IMPLEMENTED
+  REJECTED
+  ARCHIVED
+}
+
+// Models
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  phone     String?
+  avatar    String?
+  role      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  createdTasks       Task[]         @relation("TaskCreator")
+  taskComments       TaskComment[]
+  taskHistory        TaskHistory[]
+  createdTaskGroups  TaskGroup[]    @relation("TaskGroupCreator")
+  createdIdeaBoards  IdeaBoard[]    @relation("IdeaBoardCreator")
+  createdIdeas       Idea[]         @relation("IdeaCreator")
+  ideaComments       IdeaComment[]
+
+  @@map("users")
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String
+  color     String?  // hex color code
+  icon      String?  // icon name or emoji
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  tasks         Task[]
+  taskTemplates TaskTemplate[]
+  ideaBoards    IdeaBoard[]
+
+  @@map("categories")
+}
+
+model Task {
+  id          String     @id @default(uuid())
+  title       String
+  description String?    @db.Text
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(MEDIUM)
+  dueDate     DateTime?  @map("due_date")
+  completedAt DateTime?  @map("completed_at")
+
+  // Foreign Keys
+  categoryId   String?  @map("category_id")
+  createdBy    String   @map("created_by")
+  parentTaskId String?  @map("parent_task_id")
+  groupId      String?  @map("group_id")
+  
+  // Arrays for storing IDs (manual many-to-many)
+  assignedToIds String[] @map("assigned_to_ids")
+  inLoopIds     String[] @map("in_loop_ids")
+  attachments   String[] // File URLs or IDs
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  category      Category?       @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  creator       User            @relation("TaskCreator", fields: [createdBy], references: [id])
+  parentTask    Task?           @relation("SubTasks", fields: [parentTaskId], references: [id], onDelete: Cascade)
+  subTasks      Task[]          @relation("SubTasks")
+  group         TaskGroup?      @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  
+  repeat        TaskRepeat?
+  reminders     TaskReminder[]
+  checklist     ChecklistItem[]
+  comments      TaskComment[]
+  history       TaskHistory[]
+
+  @@index([status])
+  @@index([dueDate])
+  @@index([categoryId])
+  @@index([createdBy])
+  @@index([groupId])
+  @@map("tasks")
+}
+
+model TaskRepeat {
+  id            String         @id @default(uuid())
+  taskId        String?        @unique @map("task_id")
+  interval      RepeatInterval
+  startDate     DateTime       @map("start_date")
+  endDate       DateTime?      @map("end_date")
+  
+  // Advanced repeat options
+  daysOfWeek      Int[]    @map("days_of_week") // 0-6 (Sunday-Saturday)
+  dayOfMonth      Int?     @map("day_of_month") // 1-31
+  skipWeekends    Boolean  @default(false) @map("skip_weekends")
+  occurrenceCount Int?     @map("occurrence_count") // Limit number of repetitions
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  task           Task?          @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskTemplates  TaskTemplate[]
+
+  @@map("task_repeats")
+}
+
+model TaskReminder {
+  id              String              @id @default(uuid())
+  taskId          String              @map("task_id")
+  channel         ReminderChannel
+  triggerType     ReminderTriggerType @map("trigger_type")
+  triggerAt       DateTime            @map("trigger_at")
+  status          ReminderStatus      @default(PENDING)
+  reminderMessage String?             @map("reminder_message") @db.Text
+  
+  // Additional fields
+  recipientIds    String[]   @map("recipient_ids")
+  retryCount      Int        @default(0) @map("retry_count")
+  sentAt          DateTime?  @map("sent_at")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@index([triggerAt])
+  @@index([status])
+  @@map("task_reminders")
+}
+
+model ChecklistItem {
+  id          String   @id @default(uuid())
+  taskId      String   @map("task_id")
+  title       String
+  isCompleted Boolean  @default(false) @map("is_completed")
+  order       Int      @default(0)
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@map("checklist_items")
+}
+
+model TaskComment {
+  id        String   @id @default(uuid())
+  taskId    String   @map("task_id")
+  userId    String   @map("user_id")
+  content   String   @db.Text
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([taskId])
+  @@index([userId])
+  @@map("task_comments")
+}
+
+model TaskHistory {
+  id        String   @id @default(uuid())
+  taskId    String   @map("task_id")
+  userId    String   @map("user_id")
+  action    String   // e.g., "created", "updated", "status_changed", "assigned", "checklist_update"
+  field     String?  // Which field changed
+  oldValue  String?  @map("old_value") @db.Text
+  newValue  String?  @map("new_value") @db.Text
+  
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([taskId])
+  @@index([userId])
+  @@map("task_history")
+}
+
+model TaskTemplate {
+  id          String     @id @default(uuid())
+  title       String
+  description String?    @db.Text
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(MEDIUM)
+  
+  // Foreign Keys
+  categoryId  String?    @map("category_id")
+  repeatId    String?    @map("repeat_id")
+  
+  // Arrays
+  checklistItems String[] @map("checklist_items")
+  attachments    String[]
+  
+  createdBy  String   @map("created_by_id")
+  updatedBy  String   @map("updated_by_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  category Category?   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  repeat   TaskRepeat? @relation(fields: [repeatId], references: [id], onDelete: SetNull)
+
+  @@index([categoryId])
+  @@index([repeatId])
+  @@map("task_templates")
+}
+
+model TaskGroup {
+  id          String      @id @default(uuid())
+  title       String
+  description String?     @db.Text
+  status      GroupStatus @default(ACTIVE)
+  type        GroupType   @default(PRIVATE)
+  groupImage  String?     @map("group_image")
+  color       String?
+  icon        String?
+  
+  // Member IDs array (manual many-to-many)
+  memberIds   String[]    @map("member_ids")
+  
+  // Audit fields
+  createdBy   String      @map("created_by")
+  updatedBy   String?     @map("updated_by")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  // Relations
+  creator     User        @relation("TaskGroupCreator", fields: [createdBy], references: [id])
+  tasks       Task[]
+
+  @@index([status])
+  @@index([type])
+  @@index([createdBy])
+  @@map("task_groups")
+}
+
+model IdeaBoard {
+  id              String   @id @default(uuid())
+  title           String
+  description     String?  @db.Text
+  coverImage      String?  @map("cover_image")
+  status          String   @default("active")
+  isPublic        Boolean  @default(false) @map("is_public")
+  
+  // Foreign Keys
+  categoryId      String?  @map("category_id")
+  
+  // Access control - array of user IDs
+  accessMemberIds String[] @map("access_member_ids")
+  
+  // Tags for categorization
+  tags            String[] @default([])
+  
+  // Audit fields
+  createdBy       String   @map("created_by")
+  updatedBy       String?  @map("updated_by")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  category        Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  creator         User      @relation("IdeaBoardCreator", fields: [createdBy], references: [id])
+  ideas           Idea[]
+
+  @@index([categoryId])
+  @@index([status])
+  @@index([createdBy])
+  @@map("idea_boards")
+}
+
+model Idea {
+  id          String     @id @default(uuid())
+  title       String
+  description String?    @db.Text
+  boardId     String     @map("board_id")
+  status      IdeaStatus @default(DRAFT)
+  
+  // Engagement metrics
+  upvotes     Int        @default(0)
+  
+  // Attachments
+  attachments String[]   @default([])
+  
+  // Tags for organization
+  tags        String[]   @default([])
+  
+  // Audit fields
+  createdBy   String     @map("created_by")
+  updatedBy   String?    @map("updated_by")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  // Relations
+  board       IdeaBoard     @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  creator     User          @relation("IdeaCreator", fields: [createdBy], references: [id])
+  comments    IdeaComment[]
+
+  @@index([boardId])
+  @@index([status])
+  @@index([createdBy])
+  @@map("ideas")
+}
+
+model IdeaComment {
+  id        String   @id @default(uuid())
+  ideaId    String   @map("idea_id")
+  userId    String   @map("user_id")
+  content   String   @db.Text
+  
+  // Optional parent for threaded comments
+  parentId  String?  @map("parent_id")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  idea      Idea          @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id])
+  parent    IdeaComment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   IdeaComment[] @relation("CommentReplies")
+
+  @@index([ideaId])
+  @@index([userId])
+  @@index([parentId])
+  @@map("idea_comments")
+}

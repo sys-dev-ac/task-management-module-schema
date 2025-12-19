@@ -1,0 +1,7233 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table TestUser {
+  id Int [pk, increment]
+  email String [unique, not null]
+  name String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table accounts {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  account_type String
+  account_details String
+  status Int [not null, default: 1]
+  is_default Int [not null, default: 1]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table acelle_campaigns {
+  id Int [pk, increment]
+  uid String [not null]
+  customer_id Int [not null]
+  type String [not null]
+  name String [not null]
+  subject String [not null]
+  plain String [not null]
+  from_email String [not null]
+  from_name String [not null]
+  reply_to String [not null]
+  status String [not null]
+  sign_dkim Boolean [not null]
+  track_open Boolean [not null]
+  track_click Boolean [not null]
+  resend Int [not null]
+  custom_order Int [not null]
+  run_at DateTime
+  delivery_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  template_source String [not null]
+  last_error String
+  image String [not null]
+  default_mail_list_id Int
+  tracking_domain_id BigInt
+  use_default_sending_server_from_email Boolean [not null, default: false]
+  preheader String
+  running_pid Int
+  template_id Int
+  skip_failed_message Boolean [not null, default: false]
+}
+
+Table acelle_languages {
+  id Int [pk, increment]
+  uid String [not null]
+  name String [not null]
+  code String [not null]
+  region_code String [not null]
+  status String [not null]
+  created_at DateTime
+  updated_at DateTime
+  is_default Boolean [not null, default: false]
+}
+
+Table acelle_pages {
+  id Int [pk, increment]
+  uid String [not null]
+  layout_id Int [not null]
+  mail_list_id Int [not null]
+  content String [not null]
+  created_at DateTime
+  updated_at DateTime
+  subject String [not null]
+  use_outside_url Boolean [not null, default: false]
+  outside_url String
+}
+
+Table acelle_settings {
+  id BigInt [pk, increment]
+  name String [not null]
+  value String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table acelle_subscribers {
+  id Int [pk, increment]
+  uid String [not null]
+  mail_list_id Int [not null]
+  email String [not null]
+  status String [not null]
+  from String [not null]
+  ip String [not null]
+  created_at DateTime
+  updated_at DateTime
+  tags String
+  verification_status String
+  last_verification_at DateTime
+  last_verification_by String
+  last_verification_result String
+  import_batch_id String
+}
+
+Table acelle_templates {
+  id Int [pk, increment]
+  uid String [not null]
+  customer_id Int
+  name String [not null]
+  subject String
+  from_name String
+  from_email String
+  reply_to String
+  content String [not null]
+  custom_order Int [not null]
+  created_at DateTime
+  updated_at DateTime
+  archived_at DateTime
+  builder Boolean [not null, default: false]
+  is_default Boolean [default: false]
+  theme String
+  type String [not null]
+  is_blank Boolean [not null, default: false]
+  funnel_prebuilds funnel_prebuilds [not null]
+}
+
+Table activations {
+  id Int [pk, increment]
+  user_id BigInt [not null]
+  code String [not null]
+  completed Boolean [not null, default: false]
+  completed_at DateTime
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table addons {
+  id BigInt [pk, increment]
+  name String [not null]
+  addon_identifier String [not null]
+  purchase_code String
+  version String
+  status Int [not null, default: 1]
+  image String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table addresses {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  name String [not null]
+  email String [not null]
+  phone_no String
+  address String [not null]
+  address_ids String
+  country String
+  state String
+  city String
+  latitude Decimal
+  longitude Decimal
+  postal_code String
+  default_shipping Int [not null, default: 0]
+  default_billing Int [not null, default: 0]
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table admin_chat_support {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  agency_id BigInt
+  status Boolean [not null, default: true]
+  whatsapp_number String [not null]
+  prefilled_message String
+  created_at DateTime
+  updated_at DateTime
+  users users [not null]
+}
+
+Table admin_get_started {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  setup_sub_account Boolean [not null, default: false]
+  setup_white_label_account Boolean [not null, default: false]
+  setup_domains Boolean [not null, default: false]
+  add_plan Boolean [not null, default: false]
+  join_affiliate Boolean [not null, default: false]
+  add_staff Boolean [not null, default: false]
+  setup_white_label_settings Boolean [not null, default: false]
+  setup_pricing_plans Boolean [not null, default: false]
+  completion_percentage Int [not null, default: 0]
+  created_at DateTime
+  updated_at DateTime
+  setup_chat_support Boolean [not null, default: false]
+}
+
+Table affiliate_clicks {
+  id BigInt [pk, increment]
+  affiliate_id BigInt
+  package_id BigInt
+  click_date_time DateTime [not null]
+  ip_address String
+  referral_url String [not null]
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  affiliates affiliates
+  packages packages
+}
+
+Table affiliate_packages {
+  id BigInt [pk, increment]
+  affiliate_id BigInt
+  program_package_id BigInt
+  commission_percentage Decimal [not null]
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+}
+
+Table affiliates {
+  id BigInt [pk, increment]
+  user_id BigInt
+  commission Decimal [not null, default: 40]
+  razorpay_account_id String
+  razorpay_account_product_id String
+  razorpay_activation_status String
+  join_date DateTime [not null]
+  affiliate_type Int [not null]
+  is_agency_admin_affiliate Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  agency_id BigInt [not null, default: 0]
+  affiliate_clicks affiliate_clicks [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table agencies {
+  id BigInt [pk, increment]
+  customer_id BigInt
+  super_agency_id BigInt [not null, default: 0]
+  sales_email String [not null]
+  admin_email String [not null]
+  subscribed_till DateTime
+  lifetime_validity Boolean [not null, default: false]
+  is_active Boolean [not null, default: true]
+  version String [not null, default: '000']
+  version_android String [not null, default: '000']
+  unlimited_credits Boolean [not null, default: false]
+  sub_account_credit_price Int [not null, default: 2000]
+  sub_account_package_type String [not null, default: 'Diamond Seller']
+  white_label_credit_price Int [not null, default: 2000]
+  email_credit_charge Decimal [not null, default: 0.09]
+  sms_trn_credit_charge Decimal [not null, default: 0.09]
+  sms_promo_credit_charge Decimal [not null, default: 0.09]
+  health_enabled Boolean [not null, default: false]
+  agency_type Int [not null, default: 0]
+  notification_app_id String
+  notification_api_key String
+  organization_domain String
+  organization_sub_domain String
+  marketplace_enabled Boolean [not null, default: false]
+  ai_suite_enabled Boolean [not null, default: false]
+  whatsapp_cloud_api Boolean [not null, default: true]
+  success_habits Boolean [not null, default: true]
+  lms Boolean [not null, default: true]
+  social_network Boolean [not null, default: true]
+  group_chat Boolean [not null, default: true]
+  ad_launcher Boolean [not null, default: true]
+  student_portal Boolean [not null, default: true]
+  common_mobile_app Boolean [not null, default: true]
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  agency_affiliate_settings agency_affiliate_settings [not null]
+  custom_menus custom_menus [not null]
+  email_server_configs email_server_configs [not null]
+  workspaces tm_workspaces [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table agency_affiliate_settings {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  agency_id BigInt [not null]
+  razorpay_key String
+  razorpay_secret String
+  commission_percentage String [not null, default: '40']
+  created_at DateTime
+  updated_at DateTime
+  agencies agencies [not null]
+  users users [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table agency_cancellations {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  name String
+  email String
+  phone String
+  signature_file String
+  nullified Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  users users [not null]
+}
+
+Table agency_categories {
+  id BigInt [pk, increment]
+  agency_id BigInt [not null]
+  parent_id BigInt
+  position Int
+  ordering Int [not null, default: 0]
+  slug String [not null]
+  commission Float [not null, default: 0]
+  is_featured Int [not null, default: 0]
+  status Int [not null, default: 0]
+  icon String
+  logo_id BigInt
+  logo String
+  banner_id BigInt
+  banner String
+  icon_location String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table agency_category_languages {
+  id BigInt [pk, increment]
+  category_id BigInt [not null]
+  lang String [not null, default: 'en']
+  title String
+  meta_title String
+  meta_description String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table agency_credit_costs {
+  id BigInt [pk, increment]
+  agency_id BigInt [not null]
+  plan_type agency_credit_costs_plan_type [not null]
+  cost Float [not null, default: 1]
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table agency_email_plans {
+  id BigInt [pk, increment]
+  agency_id BigInt [not null]
+  name String [not null]
+  credit String [not null]
+  plan_id BigInt [not null]
+  status Boolean [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table agency_extention_logs {
+  id BigInt [pk, increment]
+  agency_id BigInt [not null]
+  extended_months Int
+  previous_date DateTime
+  new_date DateTime
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table agency_marketplace_settings {
+  id BigInt [pk, increment]
+  agency_id BigInt [not null]
+  marketplace_name String
+  settings String
+  home_components String
+  banner String
+  light_logo String
+  dark_logo String
+  footer_logo String
+  business_network_banner String
+  mobile_app_banner String
+  created_at DateTime
+  updated_at DateTime
+  meta_info String
+}
+
+Table agency_plan_permissions {
+  id BigInt [pk, increment]
+  agency_plan_id BigInt [not null]
+  shop_builder Boolean [not null, default: true]
+  funnel_builder Boolean [not null, default: true]
+  form_builder Boolean
+  url_redirect Boolean [not null, default: true]
+  ad_launcher Boolean [not null, default: true]
+  crm Boolean [not null, default: true]
+  emails Boolean [not null, default: true]
+  SMS_gateway Boolean [not null, default: false]
+  whatsapp_sender Boolean [not null, default: true]
+  whatsapp_official Boolean [not null, default: true]
+  IVR_calls Boolean [not null, default: true]
+  ai_dashboard Boolean [not null, default: false]
+  ai_brain Boolean [not null, default: false]
+  ai_funnels Boolean [not null, default: false]
+  ai_agents Boolean [not null, default: false]
+  automation_workflow Boolean [not null, default: true]
+  bulk_campaigns Boolean [not null, default: true]
+  calendar_booking Boolean [not null, default: true]
+  sales_and_finance Boolean [not null, default: true]
+  lms Boolean [not null, default: true]
+  success_habits Boolean [not null, default: true]
+  community Boolean [not null, default: true]
+  app_store Boolean [not null, default: true]
+  knowledge_base Boolean [not null, default: true]
+  idea_board Boolean [not null, default: true]
+  manage_staff Boolean [not null, default: true]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table agency_plans {
+  id BigInt [pk, increment]
+  agency_id BigInt [not null]
+  enabled_for_affiliate Boolean [not null, default: false]
+  name String [not null]
+  duration Decimal [not null]
+  complimentary Int [not null, default: 0]
+  plan_id Int [not null, default: 0]
+  snapshot_id BigInt
+  email_limit BigInt [not null, default: 10000]
+  unlimited_staff Boolean [not null, default: true]
+  staff_limit Int [not null, default: 0]
+  unlimited_contacts Boolean [not null, default: true]
+  contacts_limit Int [not null, default: 0]
+  activate_package_on_purchase Boolean [not null, default: true]
+  plan_type agency_plans_plan_type [not null, default: 'Diamond_Seller']
+  health_enabled Boolean [not null, default: false]
+  school_enabled Boolean [not null, default: false]
+  school_community_settings String
+  template_access_enabled Boolean [not null, default: true]
+  template_access_list String
+  credit_usage Float [not null, default: 1]
+  charged_yearly_without_discount_credit Boolean [not null, default: false]
+  status Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  snapshots snapshots
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table announcement_banner_analytics {
+  id BigInt [pk, increment]
+  banner_id BigInt [not null]
+  user_id BigInt
+  sub_account_id String
+  event_type announcement_banner_analytics_event_type [not null]
+  user_agent String
+  ip_address String
+  metadata Json
+  created_at DateTime [not null]
+  announcement_banners announcement_banners [not null]
+  users users
+}
+
+Table announcement_banner_dismissals {
+  id BigInt [pk, increment]
+  banner_id BigInt [not null]
+  user_id BigInt [not null]
+  sub_account_id String
+  is_permanent Boolean [not null, default: false]
+  dismissed_at DateTime [not null]
+  announcement_banners announcement_banners [not null]
+  users users [not null]
+
+  indexes {
+    (banner_id, user_id, sub_account_id) [unique]
+  }
+}
+
+Table announcement_banners {
+  id BigInt [pk, increment]
+  agency_id BigInt
+  title String [not null]
+  content String [not null]
+  type announcement_banners_type [not null, default: 'text']
+  style announcement_banners_style [not null, default: 'notification']
+  animation announcement_banners_animation [not null, default: 'fade']
+  image_url String
+  link_url String
+  button_text String
+  background_color String [not null, default: '#3b82f6']
+  text_color String [not null, default: '#ffffff']
+  button_color String
+  priority Int [not null, default: 0]
+  is_dismissible Boolean [not null, default: true]
+  permanent_dismiss Boolean [not null, default: false]
+  show_countdown Boolean [not null, default: false]
+  start_time DateTime
+  end_time DateTime
+  targeting_rules Json
+  display_settings Json
+  is_active Boolean [not null, default: true]
+  impression_count Int [not null, default: 0]
+  click_count Int [not null, default: 0]
+  dismiss_count Int [not null, default: 0]
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  announcement_banner_analytics announcement_banner_analytics [not null]
+  announcement_banner_dismissals announcement_banner_dismissals [not null]
+}
+
+Table api_key_languages {
+  id BigInt [pk, increment]
+  api_key_id BigInt [not null]
+  lang String [not null, default: 'en']
+  title String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table api_keys {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  key String [not null]
+  status Boolean [not null, default: true]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table app_intro_languages {
+  id BigInt [pk, increment]
+  title String [not null]
+  order String [not null]
+  lang String [not null, default: 'en']
+  app_intro_id BigInt [not null]
+  description String
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table app_intros {
+  id BigInt [pk, increment]
+  status Int [not null, default: 1]
+  image_id BigInt
+  image String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table app_notifications {
+  id BigInt [pk, increment]
+  notifiable_id BigInt [not null]
+  user_type Int [not null, default: 0]
+  notifiable_type String [not null]
+  data String [not null]
+  read_at DateTime
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table app_store {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  app_name String
+  code String
+  state String
+  url String
+  access_token String
+  default Boolean [not null, default: false]
+  refresh_token String
+  expires_at String
+  data Json
+  created_at DateTime
+  updated_at DateTime
+  users users [not null]
+}
+
+Table apps {
+  id BigInt [pk, increment]
+  uuid String [unique, not null]
+  key String [unique, not null]
+  user_id BigInt
+  device_id BigInt
+  title String
+  website String
+  status Int [not null, default: 1]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table assignables {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  assignable_id BigInt [not null]
+  assignable_type String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table attachments {
+  id Int [pk, increment]
+  uid String [not null]
+  email_id BigInt
+  template_id BigInt
+  name String [not null]
+  file String [not null]
+  size String [not null]
+  storage String [not null, default: 'aws_s3']
+  media_id String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table attribute_category {
+  id BigInt [pk, increment]
+  category_id BigInt [not null]
+  attribute_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table attribute_languages {
+  id BigInt [pk, increment]
+  attribute_id BigInt [not null]
+  lang String [not null, default: 'en']
+  title String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table attribute_values {
+  id BigInt [pk, increment]
+  attribute_id BigInt [not null]
+  value String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table attributes {
+  id BigInt [pk, increment]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table auto_triggers {
+  id Int [pk, increment]
+  subscriber_id Int
+  created_at DateTime
+  updated_at DateTime
+  data String
+  automation2_id Int [not null]
+  executed_index String
+  exited_at DateTime
+  last_error String
+  event_time DateTime
+  next_run_on DateTime
+  event_time_actions Int [default: 0]
+  appointment_id Int
+  skip_notification_action Boolean [not null, default: false]
+  invoice_id String
+  order_id String
+  instagram_action_id String
+  is_test Boolean [not null, default: false]
+  tracking_logs tracking_logs [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table automation2_versions {
+  id BigInt [pk, increment]
+  uid String [unique, not null]
+  automation2_id Int [not null]
+  version_name String
+  data String [not null]
+  is_user_saved Boolean [not null, default: false]
+  description String
+  created_by BigInt
+  loaded_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  automation2s automation2s [not null]
+}
+
+Table automation2s {
+  id Int [pk, increment]
+  uid String [not null]
+  name String [not null]
+  customer_id Int [not null]
+  mail_list_id Int [not null]
+  time_zone String
+  status String [not null]
+  shard_number Int [not null, default: 0]
+  data String
+  created_at DateTime
+  updated_at DateTime
+  segment_id String
+  last_error String
+  schedule_on DateTime
+  schedule_off DateTime
+  allow_duplicate Boolean [not null, default: false]
+  trigger_type String
+  specific_time Boolean
+  specific_start_time String
+  specific_end_time String
+  specific_days String
+  automation2_versions automation2_versions [not null]
+  automation_overdue_configs automation_overdue_configs [not null]
+  funnel_prebuilds funnel_prebuilds [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table automation_overdue_configs {
+  id BigInt [pk, increment]
+  automation_id Int [not null]
+  automation_uid String
+  overdueable_type String [not null]
+  overdueable_id BigInt [not null]
+  morph_db String
+  delay Int [not null, default: 0]
+  overdue_webhook Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  automation2s automation2s [not null]
+}
+
+Table banners {
+  id BigInt [pk, increment]
+  order Int [not null, default: 1]
+  link String [not null, default: '/']
+  status String [not null, default: '1']
+  image_id BigInt
+  image String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table batches {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  type String [not null]
+  total_records Int [not null]
+  created_at DateTime
+  updated_at DateTime
+  bulk_operation_entries bulk_operation_entries [not null]
+}
+
+Table blog_categories {
+  id BigInt [pk, increment]
+  slug String [not null]
+  status Int [not null, default: 1]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table blog_category_languages {
+  id BigInt [pk, increment]
+  blog_category_id BigInt [not null]
+  lang String [not null, default: 'en']
+  title String
+  meta_title String
+  meta_description String
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table blog_comment_likes {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  commentable_type String [not null]
+  commentable_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table blog_comment_replies {
+  id BigInt [pk, increment]
+  user_id BigInt
+  blog_comment_id BigInt [not null]
+  parent_id BigInt
+  comment String
+  level Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table blog_comments {
+  id BigInt [pk, increment]
+  user_id BigInt
+  blog_id BigInt [not null]
+  comment String
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table blog_languages {
+  id BigInt [pk, increment]
+  blog_id BigInt [not null]
+  lang String [not null, default: 'en']
+  title String [not null]
+  short_description String
+  long_description String
+  tags String
+  meta_title String
+  meta_description String
+  meta_keyword String
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table blog_views {
+  id BigInt [pk, increment]
+  user_id BigInt
+  blog_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table blogs {
+  id BigInt [pk, increment]
+  category_id BigInt [not null]
+  user_id BigInt [not null]
+  image_id BigInt
+  image String
+  banner_id BigInt
+  banner String
+  status String [not null, default: 'published']
+  slug String [not null]
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table brand_languages {
+  id BigInt [pk, increment]
+  brand_id BigInt [not null]
+  lang String [not null]
+  title String
+  meta_title String
+  meta_description String
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table brands {
+  id BigInt [pk, increment]
+  slug String [not null]
+  status Int [not null, default: 1]
+  logo_id BigInt
+  logo String
+  banner_id BigInt
+  banner String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table bulk_operation_entries {
+  id BigInt [pk, increment]
+  bulk_operation_id BigInt [not null]
+  batch_id BigInt
+  identifier_id BigInt
+  line BigInt
+  identifier String
+  identifier_class String
+  status Int [not null, default: 0]
+  bulk_message_key String
+  created_at DateTime
+  updated_at DateTime
+  batches batches
+  bulk_operations bulk_operations [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table bulk_operations {
+  id BigInt [pk, increment]
+  user_id BigInt
+  server_side_event_id BigInt
+  operation_name String
+  type String
+  module String
+  status Boolean [not null, default: false]
+  message String
+  created_at DateTime
+  updated_at DateTime
+  bulk_operation_entries bulk_operation_entries [not null]
+  server_side_events server_side_events
+  users users
+}
+
+Table call_logs {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  contact_id BigInt
+  call_status String
+  call_type String
+  duration String
+  handled_by String
+  handled_status String
+  department String
+  file_path String
+  response String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table campaign_audience {
+  id BigInt [pk, increment]
+  campaign_id BigInt [not null]
+  contact_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+  is_message_sent BigInt [not null, default: 0]
+  whatsapp_status campaign_audience_whatsapp_status
+  email_status campaign_audience_email_status
+  wamid String
+  email_id BigInt
+  campaign_log_id BigInt
+  sms_status String
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table campaign_languages {
+  id BigInt [pk, increment]
+  campaign_id BigInt [not null]
+  lang String [not null]
+  title String [not null]
+  description String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table campaign_links {
+  id Int [pk, increment]
+  campaign_id Int [not null]
+  created_at DateTime
+  updated_at DateTime
+  url String [not null]
+}
+
+Table campaign_logs {
+  id BigInt [pk, increment]
+  campaign_audience_id BigInt
+  data Json
+  created_at DateTime
+  updated_at DateTime
+  date DateTime
+}
+
+Table campaign_products {
+  id BigInt [pk, increment]
+  user_id BigInt
+  campaign_id BigInt [not null]
+  product_id BigInt [not null]
+  status String [not null, default: 'pending']
+  discount Float
+  discount_type String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table campaign_requests {
+  id BigInt [pk, increment]
+  product_id BigInt [not null]
+  campaign_id BigInt [not null]
+  user_id BigInt [not null]
+  discount Float [not null, default: 0]
+  discount_type String
+  status String [not null, default: 'pending']
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table campaign_webhooks {
+  id BigInt [pk, increment]
+  uid String [not null]
+  type String [not null]
+  endpoint String [not null]
+  campaign_id Int [not null]
+  campaign_link_id Int
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table campaigns {
+  id BigInt [pk, increment]
+  slug String [unique, not null]
+  background_color String
+  text_color String
+  banner_id BigInt
+  banner String
+  thumbnail String
+  thumbnail_id BigInt
+  start_date DateTime
+  end_date DateTime
+  status Int [not null, default: 1]
+  featured Int [not null, default: 0]
+  flash_sale Int [not null, default: 0]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table campaigns_lists_segments {
+  id Int [pk, increment]
+  campaign_id Int [not null]
+  mail_list_id Int [not null]
+  segment_id Int
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table carts {
+  id BigInt [pk, increment]
+  seller_id BigInt
+  user_id BigInt
+  guest_id String
+  product_id BigInt
+  variant String
+  quantity Int
+  price Float
+  discount Float
+  tax Float
+  shipping_cost Float
+  shipping_type String
+  coupon_applied Boolean [default: false]
+  coupon_discount Float
+  trx_id String
+  product_referral_code String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table categories {
+  id BigInt [pk, increment]
+  parent_id BigInt
+  position Int
+  ordering Int [not null, default: 0]
+  slug String [not null]
+  commission Float [default: 0]
+  is_featured Int [not null, default: 0]
+  status Int [not null, default: 1]
+  icon String
+  logo_id BigInt
+  logo String
+  banner_id BigInt
+  banner String
+  created_at DateTime
+  updated_at DateTime
+  icon_location String
+}
+
+Table category_languages {
+  id BigInt [pk, increment]
+  category_id BigInt [not null]
+  lang String [not null, default: 'en']
+  title String
+  meta_title String
+  meta_description String
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table chat_histories {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  title String
+  chat_code String
+  message_code String
+  chat String
+  messages Int
+  favorite Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table chat_rooms {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  receiver_id BigInt [not null]
+  is_accepted Int [not null, default: 1]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table chat_widgets {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  uid String [unique, not null]
+  name String [not null]
+  description String
+  settings Json
+  status Int [not null, default: 1]
+  assigned_user_id BigInt
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  users_chat_widgets_assigned_user_idTousers users
+  users_chat_widgets_user_idTousers users [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table chats {
+  id BigInt [pk, increment]
+  name String [not null]
+  sub_name String
+  chat_code String [not null]
+  logo String
+  status Boolean [not null, default: true]
+  prompt String
+  description String
+  category String
+  type String [not null, default: 'original']
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table checkouts {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  seller_id BigInt [not null]
+  coupon_id BigInt
+  trx_id String
+  coupon_discount Float
+  status Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table cities {
+  id BigInt [pk, increment]
+  name String [not null]
+  slug String
+  state_id BigInt [not null]
+  country_id BigInt [not null]
+  cost Float [not null, default: 0]
+  latitude Decimal
+  longitude Decimal
+  status Int [not null, default: 1]
+  created_at DateTime
+  updated_at DateTime
+  logo String
+  banner String
+}
+
+Table click_logs {
+  id Int [pk, increment]
+  message_id String [not null]
+  url String [not null]
+  ip_address String [not null]
+  user_agent String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table color_languages {
+  id BigInt [pk, increment]
+  name String [not null]
+  color_id BigInt [not null]
+  lang String [not null, default: 'en']
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table colors {
+  id BigInt [pk, increment]
+  code String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table commission_histories {
+  id BigInt [pk, increment]
+  order_id BigInt
+  order_detail_id BigInt
+  seller_id BigInt
+  admin_commission Float [default: 0]
+  seller_earning Float [default: 0]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table community_announcements {
+  id BigInt [pk, increment]
+  uuid String [unique, not null]
+  community_owner_id BigInt [not null]
+  title String [not null]
+  content String
+  image_url String
+  has_cta Boolean [not null, default: false]
+  link_url String
+  button_text String
+  is_active Boolean [not null, default: true]
+  created_at DateTime
+  updated_at DateTime
+  users users [not null]
+}
+
+Table community_categories {
+  id BigInt [pk, increment]
+  slug String [not null]
+  name String [not null]
+  user_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  order Int [not null, default: 0]
+
+  indexes {
+    (user_id, name) [unique]
+  }
+}
+
+Table community_channel_criteria {
+  id BigInt [pk, increment]
+  channel_id BigInt [not null]
+  criteria_type String [not null]
+  criteria_id BigInt [not null]
+  criteria_meta Json
+  created_at DateTime
+  updated_at DateTime
+  community_channels community_channels [not null]
+}
+
+Table community_channels {
+  id BigInt [pk, increment]
+  uuid String [unique, not null]
+  community_owner_id BigInt [not null]
+  owner_id BigInt [not null]
+  owner_type String [not null]
+  name String [not null]
+  slug String [not null]
+  visibility String [not null, default: 'hidden']
+  allow_posting Boolean [not null, default: true]
+  order Int [not null, default: 0]
+  icon_url String
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  community_channel_criteria community_channel_criteria [not null]
+  users users [not null]
+
+  indexes {
+    (community_owner_id, name) [unique]
+  }
+}
+
+Table community_chat_inboxes {
+  id BigInt [pk, increment]
+  ulid String [unique, not null]
+  group_id String [not null]
+  sender_id BigInt
+  type community_chat_inboxes_type [not null]
+  data String
+  last_message_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  contacts contacts
+}
+
+Table community_comments {
+  id BigInt [pk, increment]
+  post_id BigInt [not null]
+  owner_id BigInt [not null]
+  owner_type String [not null]
+  comment String
+  parent_id BigInt
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  attachments Json
+}
+
+Table community_custom_links {
+  id BigInt [pk, increment]
+  community_owner_id BigInt [not null]
+  title String [not null]
+  url String [not null]
+  open_in_new_tab Boolean [not null, default: true]
+  is_active Boolean [not null, default: true]
+  created_at DateTime
+  updated_at DateTime
+  users users [not null]
+}
+
+Table community_follows {
+  id BigInt [pk, increment]
+  community_owner_id BigInt [not null]
+  follower_id BigInt [not null]
+  following_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+  users users [not null]
+  contacts_community_follows_follower_idTocontacts contacts [not null]
+  contacts_community_follows_following_idTocontacts contacts [not null]
+
+  indexes {
+    (community_owner_id, follower_id, following_id) [unique]
+  }
+}
+
+Table community_group_members {
+  id BigInt [pk, increment]
+  group_id String [not null]
+  member_id BigInt [not null]
+  role community_group_members_role [not null, default: 'member']
+  activity_type community_group_members_activity_type
+  activity_by BigInt
+  activity_at DateTime
+  removed_at DateTime
+  removed_by BigInt
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  is_pinned Boolean [not null, default: false]
+  is_muted Boolean [not null, default: false]
+  is_archived Boolean [not null, default: false]
+  contacts_community_group_members_activity_byTocontacts contacts
+  community_groups community_groups [not null]
+  contacts_community_group_members_member_idTocontacts contacts [not null]
+  contacts_community_group_members_removed_byTocontacts contacts
+
+  indexes {
+    (group_id, member_id) [unique]
+  }
+}
+
+Table community_groups {
+  id BigInt [pk, increment]
+  uuid String [unique, not null]
+  community_owner_id BigInt
+  owner_id BigInt [not null]
+  name String [not null]
+  slug String [not null]
+  type community_groups_type [not null]
+  description String
+  icon_url String
+  cover_url String
+  is_password_protected Boolean [not null, default: false]
+  password String
+  is_unleavable Boolean [not null, default: false]
+  created_by BigInt [not null]
+  default_role community_groups_default_role [not null, default: 'member']
+  is_pinned Boolean [not null, default: false]
+  status community_groups_status [not null, default: 'active']
+  auto_add_members Boolean [not null, default: false]
+  messaging_permissions Json [not null]
+  settings Json
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  community_group_members community_group_members [not null]
+  users users
+  contacts_community_groups_created_byTocontacts contacts [not null]
+  contacts_community_groups_owner_idTocontacts contacts [not null]
+}
+
+Table community_likes {
+  id BigInt [pk, increment]
+  likeable_id BigInt [not null]
+  likeable_type String [not null]
+  owner_id BigInt [not null]
+  owner_type String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table community_mentions {
+  id BigInt [pk, increment]
+  mentionable_type String [not null]
+  mentionable_id BigInt [not null]
+  mentioned_type String [not null]
+  mentioned_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table community_notifications {
+  id BigInt [pk, increment]
+  notifiable_type String [not null]
+  notifiable_id BigInt [not null]
+  sender_type String [not null]
+  sender_id BigInt [not null]
+  type String [not null]
+  subject_type String [not null]
+  subject_id BigInt [not null]
+  data String
+  read_at DateTime
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table community_point_logs {
+  id BigInt [pk, increment]
+  owner_id BigInt [not null]
+  course_id BigInt
+  owner_type String [not null]
+  point BigInt [not null, default: 0]
+  type String [not null]
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  log_date DateTime
+}
+
+Table community_points_rules {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  action String [not null]
+  condition String [not null]
+  points BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+}
+
+Table community_post_reports {
+  id BigInt [pk, increment]
+  report_type String
+  post_id BigInt [not null]
+  comment_id BigInt
+  reporter_id BigInt [not null]
+  reason String [not null]
+  status community_post_reports_status [not null, default: 'pending']
+  created_at DateTime
+  updated_at DateTime
+  community_posts community_posts [not null]
+  contacts contacts [not null]
+}
+
+Table community_posts {
+  id BigInt [pk, increment]
+  community_owner_id BigInt
+  owner_id BigInt [not null]
+  owner_type String [not null]
+  category_id BigInt
+  post_type String [not null, default: 'public_feed']
+  channel_ids Json
+  title String [not null]
+  description String
+  approval_status community_posts_approval_status [not null, default: 'pending']
+  is_pinned Boolean [not null, default: false]
+  hide_comment_count Boolean [not null, default: false]
+  turn_off_commenting Boolean [not null, default: false]
+  hide_like_count Boolean [not null, default: false]
+  pinned_order BigInt
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  attachments Json
+  community_post_reports community_post_reports [not null]
+}
+
+Table community_profiles {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  name String [not null]
+  about String
+  image_id BigInt
+  image String
+  logo_id BigInt
+  logo String
+  login_banner_id BigInt
+  login_banner String
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  auto_community_access Boolean [not null, default: false]
+  favicon_id BigInt
+  favicon_link String
+  meta_title String
+  meta_description String
+  header_script String
+  body_script String
+  show_member_address Boolean [not null, default: false]
+  device_limit Int [not null, default: 0]
+  community_version Json
+}
+
+Table compare_products {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  product_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table contact_additional_data {
+  id BigInt [pk, increment]
+  contact_id BigInt [not null]
+  custom_field_id BigInt [not null]
+  form_id BigInt
+  lead_gen_id BigInt
+  value Json [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table contact_devices {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  contact_id BigInt [not null]
+  device_id String [not null]
+  created_at DateTime
+  updated_at DateTime
+
+  indexes {
+    (user_id, device_id) [unique]
+  }
+}
+
+Table contact_documents {
+  id BigInt [pk, increment]
+  contact_id BigInt [not null]
+  user_id BigInt [not null]
+  file_name String [not null]
+  file_path String [not null]
+  file_size String [not null]
+  file_type String
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  contacts contacts [not null]
+  users users [not null]
+}
+
+Table contact_otp {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  email String [not null]
+  otp String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table contact_tag {
+  id BigInt [pk, increment]
+  contact_id BigInt [not null]
+  note_id BigInt
+  tag_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+  notes notes
+}
+
+Table contact_us {
+  id BigInt [pk, increment]
+  seller_id BigInt
+  name String [not null]
+  email String [not null]
+  phone String [not null]
+  subject String
+  message String [not null]
+  reply String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table contacts {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  customer_id BigInt
+  first_name String [not null]
+  last_name String [not null]
+  email String [not null]
+  password String
+  pin Int
+  google_id String
+  phone String [not null]
+  date_of_birth DateTime
+  profile_image String
+  contact_type String [not null]
+  timezone String
+  email_dnd Boolean [not null, default: false]
+  sms_dnd Boolean [not null, default: false]
+  call_dnd Boolean [not null, default: false]
+  business_name String
+  gst_no String
+  street_address String
+  city String
+  country String
+  state String
+  postal_code String
+  website String
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  uid String
+  form_builder_id String
+  is_searchy_lead Boolean [not null, default: false]
+  access_token String
+  notification_device_ids String
+  parent_id BigInt
+  source String
+  batch_id BigInt
+  whatsapp_dnd Boolean [default: false]
+  is_intervened Boolean [not null, default: true]
+  form_type String
+  form_id String
+  bio String
+  name_changed Boolean [not null, default: false]
+  total_points BigInt [not null, default: 0]
+  has_community_access Boolean [not null, default: false]
+  page_visit_id String
+  last_message_at DateTime
+  instagram_user_id String
+  instagram String
+  ai_response_enabled Boolean [not null, default: true]
+  community_chat_inboxes community_chat_inboxes [not null]
+  community_follows_community_follows_follower_idTocontacts community_follows [not null]
+  community_follows_community_follows_following_idTocontacts community_follows [not null]
+  community_group_members_community_group_members_activity_byTocontacts community_group_members [not null]
+  community_group_members_community_group_members_member_idTocontacts community_group_members [not null]
+  community_group_members_community_group_members_removed_byTocontacts community_group_members [not null]
+  community_groups_community_groups_created_byTocontacts community_groups [not null]
+  community_groups_community_groups_owner_idTocontacts community_groups [not null]
+  community_post_reports community_post_reports [not null]
+  contact_documents contact_documents [not null]
+  ui_conversations ui_conversations [not null]
+  ui_group_participants ui_group_participants [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table countries {
+  id BigInt [pk, increment]
+  name String [not null]
+  iso3 String
+  iso2 String
+  phonecode String
+  currency String
+  currency_symbol String
+  latitude Decimal
+  longitude Decimal
+  status Int [not null, default: 1]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table coupon_languages {
+  id BigInt [pk, increment]
+  coupon_id BigInt [not null]
+  lang String [not null, default: 'en']
+  title String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table coupons {
+  id BigInt [pk, increment]
+  user_id BigInt
+  type String [not null]
+  code String [not null]
+  banner_id BigInt
+  banner String
+  minimum_shopping Float
+  maximum_discount Float
+  product_id String
+  discount_type String
+  discount Float
+  status Int [not null, default: 1]
+  start_date DateTime
+  end_date DateTime
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table credit_usages {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  agency_id BigInt [not null]
+  agency_plan_id BigInt [not null, default: 0]
+  credits_used Decimal [not null, default: 0]
+  status Boolean [not null, default: false]
+  related_user_id BigInt [not null]
+  usage_date DateTime [default: `now()`, not null]
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table crm_quick_filters {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  name String [not null]
+  filters String
+  created_at DateTime
+  updated_at DateTime
+  users users [not null]
+}
+
+Table cronjobs {
+  id Int [pk, increment]
+  name String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table currencies {
+  id BigInt [pk, increment]
+  name String [not null]
+  symbol String [not null]
+  code String [not null]
+  exchange_rate Float
+  status Int [not null, default: 1]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table custom_fields {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  custom_folder_id BigInt
+  field_type String [not null]
+  name String [not null]
+  key String [not null]
+  object String
+  placeholder String
+  default_value String
+  description String
+  status Boolean [not null, default: true]
+  locked Boolean [not null, default: true]
+  created_at DateTime
+  updated_at DateTime
+  questions Json
+  field_attributes Json
+  deleted_at DateTime
+  is_base_column Boolean [not null, default: false]
+  ivr_form ivr_form [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table custom_folders {
+  id BigInt [pk, increment]
+  user_id BigInt
+  name String [not null]
+  type String [not null]
+  object String
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table custom_menu_users {
+  id BigInt [pk, increment]
+  custom_menu_id BigInt [not null]
+  user_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+  custom_menus custom_menus [not null]
+  users users [not null]
+}
+
+Table custom_menus {
+  id BigInt [pk, increment]
+  agency_id BigInt
+  link_icon String
+  link_title String [not null]
+  url String [not null]
+  when_clicked Int [not null, default: 0]
+  for_agency_sidebar Boolean [not null, default: false]
+  for_subaccount_sidebar Boolean [not null, default: false]
+  visible_for_all Boolean [not null, default: false]
+  add_to_header_submenu Boolean [not null, default: false]
+  header_submenu String
+  order Int [not null, default: 0]
+  status Boolean [not null, default: false]
+  permissions String
+  created_at DateTime
+  updated_at DateTime
+  custom_menu_users custom_menu_users [not null]
+  agencies agencies
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table custom_values {
+  id BigInt [pk, increment]
+  user_id BigInt
+  custom_folder_id BigInt
+  name String [not null]
+  key String [not null]
+  value String
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table delivery_hero_accounts {
+  id BigInt [pk, increment]
+  user_id BigInt
+  order_id BigInt
+  delivery_hero_id BigInt
+  source String [not null]
+  type String [not null]
+  amount Float
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table delivery_heroes {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  pickup_hub_id BigInt
+  driving_licence String
+  driving_licence_image String
+  salary Float
+  commission Float
+  total_commission Float
+  total_collection Float
+  total_paid Float
+  country_id BigInt
+  state_id BigInt
+  city_id Int
+  address String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table delivery_histories {
+  id BigInt [pk, increment]
+  order_id BigInt [not null]
+  user_id BigInt
+  delivery_hero_id BigInt
+  event String [not null]
+  remarks String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table devices {
+  id BigInt [pk, increment]
+  uuid String [unique, not null]
+  user_id BigInt
+  name String [not null]
+  phone String
+  user_name String
+  qr String
+  meta String
+  status Int [not null, default: 0]
+  created_at DateTime
+  updated_at DateTime
+  is_default Boolean [not null, default: false]
+  staff_devices staff_devices [not null]
+}
+
+Table documents {
+  id BigInt [pk, increment]
+  user_id BigInt
+  name String
+  type String
+  path String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table domains {
+  id BigInt [pk, increment]
+  user_id BigInt
+  domain String [not null]
+  certificate_number String
+  record_name String
+  record_value String
+  ssl_number String
+  ssl_dns_verified_at DateTime
+  ssl_issue_date DateTime
+  ssl_expiry_date DateTime
+  ssl_certificate String
+  ssl_private String
+  chain_of_certificate String
+  ssl_chain String
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  certificate_deployed Boolean [not null, default: false]
+  last_error String
+  verification_response String
+  ready_for_renew Boolean [not null, default: false]
+  www_access Boolean [not null, default: false]
+
+  indexes {
+    (domain, deleted_at) [unique]
+  }
+}
+
+Table email_links {
+  id Int [pk, increment]
+  uid String [not null]
+  email_id Int [not null]
+  link String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table email_server_configs {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  agency_id BigInt
+  provider String [not null]
+  settings Json [not null]
+  status Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  agencies agencies
+  users users [not null]
+}
+
+Table email_templates {
+  id Int [pk, increment]
+  name String [not null]
+  details String
+  slug String
+  language String [default: 'en']
+  html String
+}
+
+Table email_verification_servers {
+  id Int [pk, increment]
+  uid String [not null]
+  admin_id Int
+  customer_id Int
+  name String [not null]
+  type String [not null]
+  options String
+  status String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table email_verifications {
+  id Int [pk, increment]
+  result String [not null]
+  details String [not null]
+  subscriber_id Int [not null]
+  email_verification_server_id Int [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table email_webhooks {
+  id BigInt [pk, increment]
+  uid String [not null]
+  type String [not null]
+  endpoint String [not null]
+  email_id Int [not null]
+  email_link_id Int
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table emails {
+  id Int [pk, increment]
+  uid String [not null]
+  automation2_id BigInt
+  campaign_id BigInt
+  subject String
+  from_email String
+  from_name String
+  reply_to String
+  created_at DateTime
+  updated_at DateTime
+  sign_dkim Boolean [not null, default: true]
+  track_open Boolean [not null, default: true]
+  track_click Boolean [not null, default: true]
+  action_id String
+  plain String
+  tracking_domain_id BigInt
+  template_id Int
+  customer_id Int [not null, default: 0]
+  skip_failed_message Boolean [not null, default: false]
+  preheader String
+}
+
+Table event_additional_fields {
+  id BigInt [pk, increment]
+  event_id BigInt [not null]
+  form_builder_id BigInt [not null]
+  form_builder_field_id BigInt [not null]
+  title String [not null]
+  value String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table event_custom_fields {
+  id BigInt [pk, increment]
+  event_id BigInt [not null]
+  custom_field_id BigInt
+  name String
+  type String [not null, default: 'text']
+  is_required Boolean [not null, default: false]
+  value String
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table event_locations {
+  id Int [pk, increment]
+  name String
+  public_name String
+  short_description String
+  image String
+  admin_side String
+  public_side String
+  admin_field String
+  public_field String
+  details String
+}
+
+Table event_type_custom_fields {
+  id BigInt [pk, increment]
+  event_type_id BigInt [not null]
+  custom_field_id BigInt [not null]
+  name String
+  is_required Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+}
+
+Table event_type_locations {
+  id Int [pk, increment]
+  staff_id BigInt
+  event_type_id Int
+  event_location_id Int
+  value String
+  short_description String
+  details String
+  generate_link Boolean [not null, default: false]
+  users users
+}
+
+Table event_type_staff_details {
+  id BigInt [pk, increment]
+  event_type_id Int [not null]
+  staff_id BigInt [not null]
+  timezone String
+  hours String
+  created_at DateTime
+  updated_at DateTime
+  event_types event_types [not null]
+  users users [not null]
+}
+
+Table event_types {
+  id Int [pk, increment]
+  calendar_scope Boolean [not null, default: false]
+  priority_based Boolean [not null, default: false]
+  user_id Int
+  staff_ids Json
+  name String
+  details String
+  email_required Boolean [not null, default: true]
+  phone_required Boolean [not null, default: true]
+  booking_per_slot Int [not null, default: 1]
+  link String [not null]
+  form_builder_id BigInt
+  redirect_url String
+  color String
+  timezone String
+  date_range String
+  minimum_scheduling_notice String
+  duration String [default: '30_min']
+  before String [default: '0_min']
+  after String [default: '0_min']
+  schedule_id Int
+  hours String
+  is_active Int [not null, default: 1]
+  max_per_day Int
+  created_at DateTime
+  updated_at DateTime
+  event_type_staff_details event_type_staff_details [not null]
+}
+
+Table events {
+  id Int [pk, increment]
+  contact_id BigInt
+  uid String
+  user_id Int
+  canceled_by Int
+  event_type_id Int
+  staff_id BigInt
+  is_active Int [default: 1]
+  event_location_id Int
+  event_location_value String
+  name String
+  duration String
+  email String
+  phone String
+  guest_emails String
+  question String
+  start String [not null]
+  end String [not null]
+  color String
+  timezone String
+  date DateTime
+  google_event_id String
+  cancellation_reason String
+  created_at DateTime
+  updated_at DateTime
+  no_show Int [not null, default: 0]
+  is_rescheduled Boolean [not null, default: false]
+  users users
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table facebook_page_forms {
+  id BigInt [pk, increment]
+  facebook_page_id BigInt [not null]
+  user_id BigInt [not null]
+  facebook_form_id BigInt [not null]
+  name String [not null]
+  status String
+  questions Json
+  created_at DateTime
+  updated_at DateTime
+  field_mapped Boolean [not null, default: false]
+  activated Boolean [not null, default: false]
+}
+
+Table facebook_user_accounts {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  node_id String [not null]
+  node_type String [not null]
+  name String
+  access_token String
+  created_at DateTime
+  updated_at DateTime
+  default Boolean [not null, default: false]
+  webhook_subscribed Boolean [not null, default: false]
+}
+
+Table facebook_user_tokens {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  access_token String
+  code String
+  expired_at DateTime
+  facebook_user_id BigInt
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table failed_jobs {
+  id Int [pk, increment]
+  connection String [not null]
+  queue String [not null]
+  payload String [not null]
+  exception String [not null]
+  failed_at DateTime [default: `now()`, not null]
+  uuid String [unique, not null]
+}
+
+Table favorite_chats {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  chat_code String [not null]
+  favorite Boolean [not null, default: true]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table field_options {
+  id Int [pk, increment]
+  uid String [not null]
+  field_id Int [not null]
+  label String [not null]
+  value String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table fields {
+  id Int [pk, increment]
+  uid String [not null]
+  mail_list_id Int [not null]
+  label String [not null]
+  type String [not null]
+  tag String [not null]
+  default_value String
+  visible Boolean [not null, default: true]
+  required Boolean [not null, default: false]
+  custom_order Int [not null]
+  created_at DateTime
+  updated_at DateTime
+  is_email Boolean [not null, default: false]
+}
+
+Table five_minute_journals {
+  id BigInt [pk, increment]
+  user_id BigInt
+  date DateTime
+  day DateTime
+  grateful String
+  habit String
+  dream String
+  tasks String
+  affirmations String
+  feeling String
+  dont_waste String
+  fav_things String
+  must_accomplish String
+  notes String
+  created_at DateTime
+  updated_at DateTime
+  contact_id BigInt
+  user_type String [not null, default: 'App\Models\User']
+}
+
+Table flag_icons {
+  id Int [pk, increment]
+  image String [not null]
+  title String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table folderables {
+  id BigInt [pk, increment]
+  folder_id BigInt [not null]
+  folderable_type String [not null]
+  folderable_id BigInt [not null]
+  folders folders [not null]
+}
+
+Table folders {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  parent_id BigInt
+  name String [not null]
+  type String
+  archived_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  folderables folderables [not null]
+  folders folders
+  other_folders folders [not null]
+  users users [not null]
+}
+
+Table form_builder_fields {
+  id BigInt [pk, increment]
+  form_builder_id BigInt [not null]
+  field_name String [not null]
+  field_preview_title String
+  field_placeholder String
+  field_type Int [not null, default: 0]
+  is_required Boolean [not null, default: false]
+  position Int [not null, default: 0]
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  custom_field_id BigInt
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table form_builders {
+  id BigInt [pk, increment]
+  uid String [not null]
+  name String [not null]
+  user_id BigInt [not null]
+  pipeline_id BigInt
+  stage_id BigInt
+  tags String [not null]
+  is_active Boolean [not null, default: true]
+  position Int [not null, default: 0]
+  enable_declaration Boolean [not null, default: false]
+  policy_name String
+  policy_url String
+  apply_affiliate_attribution Boolean [not null, default: false]
+  affiliate_attribution_days Int [not null, default: 0]
+  created_at DateTime
+  updated_at DateTime
+  button_title String [not null, default: 'Enquire Now']
+  button_color String
+  button_text_color String
+  redirect_link String
+  pixel_id String
+  form_background_color String [not null, default: '#ffffff']
+  form_text_color String [not null, default: '#000000']
+  is_transparent_form Boolean [not null, default: false]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table form_responses {
+  id BigInt [pk, increment]
+  answerable_type String [not null]
+  answerable_id BigInt [not null]
+  response String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table forms {
+  id BigInt [pk, increment]
+  uid String [not null]
+  name String [not null]
+  customer_id Int [not null]
+  mail_list_id Int
+  template_id Int
+  metadata String
+  status String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table free_credits {
+  id BigInt [pk, increment]
+  credits_count BigInt [not null]
+  free_credit BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table funnel_categories {
+  id BigInt [pk, increment]
+  slug String [not null]
+  name String [not null]
+  type String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table funnel_folders {
+  id BigInt [pk, increment]
+  name String [not null]
+  user_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+  position BigInt [not null, default: 0]
+  users users [not null]
+  landing_page_funnels landing_page_funnels [not null]
+}
+
+Table funnel_prebuilds {
+  id BigInt [pk, increment]
+  name String [not null]
+  description String
+  user_id BigInt [not null]
+  funnel_id BigInt
+  pipeline_id BigInt
+  email_template_id Int
+  whatsapp_template_id BigInt
+  automation_id Int
+  agency_id Int [not null, default: 0]
+  funnel_category_id BigInt [not null]
+  template_type String
+  visibility funnel_prebuilds_visibility [not null, default: 'global']
+  image String
+  image_path Json
+  status Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  automation2s automation2s
+  acelle_templates acelle_templates
+  pipelines pipelines
+  templates templates
+}
+
+Table funnel_settings {
+  id BigInt [pk, increment]
+  funnel_id BigInt [not null]
+  domain_id BigInt
+  name String [not null]
+  favicon_id String
+  favicon String
+  header_tracking_code String
+  body_tracking_code String
+  footer_tracking_code String
+  created_at DateTime
+  updated_at DateTime
+  path String
+}
+
+Table funnel_tracking_events {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  funnel_id BigInt [not null]
+  pixel_id String [not null]
+  access_token String [not null]
+  level funnel_tracking_events_level [not null, default: 'funnel']
+  page_ids Json
+  send_via_capi Boolean [not null, default: true]
+  capture_on_pageview Boolean [not null, default: true]
+  status Boolean [not null, default: true]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table get_started {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  download_app Boolean [not null, default: false]
+  gst_and_business_info Boolean [not null, default: false]
+  connect_facebook Boolean [not null, default: false]
+  whatsapp_sender_and_cloud_api Boolean [not null, default: false]
+  setup_pipeline Boolean [not null, default: false]
+  connect_payment_gateway Boolean [not null, default: false]
+  add_staff Boolean [not null, default: false]
+  domain_setup Boolean [not null, default: false]
+  lms_setup Boolean [not null, default: false]
+  completion_percentage Int [not null, default: 0]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table goals {
+  id BigInt [pk, increment]
+  user_id BigInt
+  name String
+  date DateTime
+  description String
+  completed Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  contact_id BigInt
+  user_type String [not null, default: 'App\Models\User']
+}
+
+Table groups {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  name String
+  created_at DateTime
+  updated_at DateTime
+  uid String
+}
+
+Table health_anxiety_times {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  contact_id BigInt [not null]
+  times Float [not null, default: 0]
+  date DateTime [not null]
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table health_before_after_photos {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  contact_id BigInt [not null]
+  date DateTime [not null]
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  photo_front String
+  photo_side String
+  photo_back String
+}
+
+Table health_heights {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  contact_id BigInt [not null]
+  height Float [not null, default: 0]
+  date DateTime [not null]
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table health_plans {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  contact_id BigInt [not null]
+  name String
+  file_name String
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table health_pressures {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  contact_id BigInt [not null]
+  pressure Float [not null, default: 0]
+  date DateTime [not null]
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  systolic Float [not null, default: 0]
+  diastolic Float [not null, default: 0]
+}
+
+Table health_profiles {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  contact_id BigInt [not null]
+  gender String
+  height_unit String
+  weight_unit String
+  dob DateTime
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table health_questionnaire_answers {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  contact_id BigInt [not null]
+  date DateTime
+  health_questionnaire_id BigInt
+  custom_field_id BigInt
+  field_name String
+  is_required Boolean [not null]
+  type String
+  response String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table health_questionnaires {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  custom_field_id BigInt [not null]
+  field_name String
+  is_required Boolean [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table health_sleep_hours {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  contact_id BigInt [not null]
+  hours Float [not null, default: 0]
+  date DateTime [not null]
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table health_sugar_levels {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  contact_id BigInt [not null]
+  sugar_level Float [not null, default: 0]
+  date DateTime [not null]
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table health_weights {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  contact_id BigInt [not null]
+  weight Float [not null, default: 0]
+  date DateTime [not null]
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table import_progresses {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  type String
+  current BigInt [not null, default: 0]
+  total BigInt [not null, default: 0]
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table ingestion_events {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  item_id String [not null]
+  stage ingestion_events_stage [not null]
+  info Json
+  created_at DateTime [default: `now()`, not null]
+  knowledge_items knowledge_items [not null]
+  users users [not null]
+}
+
+Table instagram_webhook_logs {
+  id BigInt [pk, increment]
+  user_id BigInt
+  event_type String
+  object_id String
+  sender_id String
+  sender_username String
+  content String
+  payload Json
+  status String [not null, default: 'received']
+  error_message String
+  processed_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  users users
+}
+
+Table integrations {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  service String [not null]
+  data Json [not null]
+  webhook_channel_id String
+  webhook_resource_id String
+  webhook_expiration DateTime
+  created_at DateTime
+  updated_at DateTime
+  users users [not null]
+
+  indexes {
+    (user_id, service) [unique]
+  }
+}
+
+Table ip_locations {
+  id Int [pk, increment]
+  ip_address String [not null]
+  country_code String
+  country_name String
+  region_code String
+  region_name String
+  city String
+  zipcode String
+  latitude String
+  longitude String
+  metro_code String
+  areacode String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table ivr_form {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  field_name String [not null]
+  field_type Int [not null, default: 0]
+  is_required Boolean [not null, default: false]
+  position Int [not null, default: 0]
+  custom_field_id BigInt
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  custom_fields custom_fields
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table job_batches {
+  id String [pk]
+  name String [not null]
+  total_jobs Int [not null]
+  pending_jobs Int [not null]
+  failed_jobs Int [not null]
+  failed_job_ids String [not null]
+  options String
+  cancelled_at Int
+  created_at Int [not null]
+  finished_at Int
+}
+
+Table job_monitors {
+  id BigInt [pk, increment]
+  uid String [not null]
+  subject_name String [not null]
+  subject_id BigInt [not null]
+  batch_id String
+  job_id BigInt
+  job_type String
+  error String
+  data String
+  status String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table jobs {
+  id BigInt [pk, increment]
+  queue String [not null]
+  payload String [not null]
+  attempts Int [not null]
+  reserved_at Int
+  available_at Int [not null]
+  created_at Int [not null]
+}
+
+Table jwt_tokens {
+  id BigInt [pk, increment]
+  model_id BigInt [not null]
+  model_type String [not null]
+  jti String [unique, not null]
+  ip_address String
+  user_agent String
+  browser String
+  platform String
+  last_used_at DateTime
+  expires_at DateTime [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table knowledge_item_vectors {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  item_id String [not null]
+  vector_id String [unique, not null]
+  chunk_index Int
+  synced_at DateTime
+}
+
+Table knowledge_items {
+  id String [pk]
+  user_id BigInt [not null]
+  type String [not null]
+  visibility knowledge_items_visibility [not null, default: 'private']
+  title String
+  description String
+  raw_text String
+  source_url String
+  agent_content_id String
+  is_indexed Int [not null, default: 0]
+  embedding_version Int [not null, default: 1]
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  ingestion_events ingestion_events [not null]
+  users users [not null]
+}
+
+Table landing_page_contents {
+  id BigInt [pk, increment]
+  landing_page_id BigInt
+  funnel_id BigInt
+  content_type String [not null]
+  content_url String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table landing_page_funnels {
+  id BigInt [pk, increment]
+  user_id BigInt
+  title String [not null]
+  type String [not null, default: 'manual']
+  is_active Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  prebuild Boolean [not null, default: false]
+  agency_id Int [not null, default: 0]
+  folder_id BigInt
+  position BigInt [not null, default: 0]
+  funnel_folders funnel_folders
+}
+
+Table landing_page_versions {
+  id BigInt [pk, increment]
+  landing_page_id BigInt [not null]
+  user_id BigInt [not null]
+  data String
+  created_at DateTime
+  updated_at DateTime
+  landing_pages landing_pages [not null]
+  users users [not null]
+}
+
+Table landing_pages {
+  id BigInt [pk, increment]
+  funnel_id BigInt
+  title String [not null]
+  slug String [not null]
+  editor_path String
+  page_uuid String
+  user_id BigInt
+  user_type Int [not null, default: 0]
+  data String
+  is_active Boolean [not null, default: false]
+  default_page Boolean [not null, default: false]
+  domain_id BigInt
+  prebuild Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  rendered_data String
+  position BigInt [default: 0]
+  landing_page_versions landing_page_versions [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table language_configs {
+  id Int [pk, increment]
+  language_id Int [not null]
+  name String [not null]
+  script String
+  native String
+  regional String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table languages {
+  id Int [pk, increment]
+  name String [not null]
+  locale String [unique, not null]
+  status Boolean [not null, default: true]
+  flag String
+  text_direction String [default: 'ltr']
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table layouts {
+  id Int [pk, increment]
+  uid String [not null]
+  alias String [not null]
+  group_name String [not null]
+  content String [not null]
+  type String [not null]
+  created_at DateTime
+  updated_at DateTime
+  subject String [not null]
+}
+
+Table link_pixel {
+  link_id Int [not null]
+  pixel_id Int [not null]
+
+  indexes {
+    (link_id, pixel_id) [unique]
+  }
+}
+
+Table links {
+  id Int [pk, increment]
+  user_id Int
+  alias String [not null]
+  url String [not null]
+  title String
+  country_target String
+  platform_target String
+  password String
+  disabled Int [not null, default: 0]
+  privacy Int [not null, default: 0]
+  expiration_url String
+  clicks Int [default: 0]
+  space_id Int
+  domain_id Int
+  ends_at DateTime
+  expiration_clicks Int [default: 0]
+  target_type Int [default: 0]
+  rotation_target String
+  last_rotation Int [default: 0]
+  privacy_password String
+  description String
+  image String
+  language_target String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table llm_models {
+  id BigInt [pk, increment]
+  llm_provider_id BigInt [not null]
+  model_id String [not null]
+  display_name String [not null]
+  model_type String [not null]
+  capabilities Json
+  is_active Boolean [not null, default: true]
+  is_default Boolean [not null, default: false]
+  last_used_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  llm_providers llm_providers [not null]
+
+  indexes {
+    (llm_provider_id, model_id) [unique]
+  }
+}
+
+Table llm_providers {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  provider_name String [not null]
+  encrypted_api_key String [not null]
+  api_key_last4 String [not null]
+  is_default Boolean [not null, default: false]
+  is_active Boolean [not null, default: true]
+  capabilities Json
+  last_used_at DateTime
+  last_synced_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  llm_models llm_models [not null]
+  users users [not null]
+
+  indexes {
+    (user_id, provider_name) [unique]
+  }
+}
+
+Table log_activities {
+  id BigInt [pk, increment]
+  url String [not null]
+  method String [not null]
+  ip String [not null]
+  browser String
+  platform String
+  user_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table ltm_translations {
+  id BigInt [pk, increment]
+  status Int [not null, default: 0]
+  locale String [not null]
+  group String [not null]
+  key String [not null]
+  value String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table mail_lists {
+  id Int [pk, increment]
+  uid String [not null]
+  customer_id Int [not null]
+  contact_id Int [not null]
+  name String [not null]
+  default_subject String [not null]
+  from_email String
+  from_name String
+  remind_message String
+  email_subscribe String
+  email_unsubscribe String
+  email_daily String
+  send_welcome_email Boolean [not null, default: false]
+  unsubscribe_notification Boolean [not null, default: false]
+  status String [not null]
+  created_at DateTime
+  updated_at DateTime
+  custom_order Int [not null, default: 0]
+  subscribe_confirmation Boolean [not null, default: true]
+  all_sending_servers Boolean [default: false]
+  embedded_form_options String
+}
+
+Table mail_lists_sending_servers {
+  id Int [pk, increment]
+  sending_server_id Int [not null]
+  mail_list_id Int [not null]
+  fitness Int [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table media {
+  id BigInt [pk, increment]
+  name String
+  user_id BigInt
+  storage String [not null, default: 'local']
+  type String
+  extension String
+  size BigInt
+  original_file String
+  thumbnail String
+  stream_path String
+  is_stream_ready Boolean [not null, default: false]
+  stream_ready_at DateTime
+  image_variants String
+  created_at DateTime
+  updated_at DateTime
+  is_trashed Boolean [not null, default: false]
+  trashed_at DateTime
+  is_project_media Boolean [not null, default: false]
+  media_conversion_logs media_conversion_logs [not null]
+}
+
+Table media_conversion_logs {
+  id BigInt [pk, increment]
+  media_id BigInt [not null]
+  job_id String
+  status String
+  stream_path String
+  metadata Json
+  message String
+  conversion_settings String
+  created_at DateTime
+  updated_at DateTime
+  media media [not null]
+}
+
+Table messages {
+  id BigInt [pk, increment]
+  chat_room_id BigInt [not null]
+  message String [not null]
+  is_seen Int [not null, default: 0]
+  type Int [not null, default: 1]
+  file_type String
+  is_file Int [not null, default: 0]
+  file String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table migrations {
+  id Int [pk, increment]
+  migration String [not null]
+  batch Int [not null]
+}
+
+Table module_items {
+  id BigInt [pk, increment]
+  module_id BigInt [not null]
+  snapshot_id BigInt [not null]
+  name String [not null]
+  data String
+  created_at DateTime
+  updated_at DateTime
+  modules modules [not null]
+  snapshots snapshots [not null]
+}
+
+Table modules {
+  id BigInt [pk, increment]
+  name String [not null]
+  model_type String
+  status Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  module_items module_items [not null]
+}
+
+Table mypipeline_workflows {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  api_token String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table notes {
+  id BigInt [pk, increment]
+  user_id BigInt
+  created_by BigInt
+  updated_by BigInt
+  title String
+  topic String
+  note String
+  opportunity_id BigInt
+  contact_id BigInt
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  user_type String [not null, default: 'App\Models\User']
+  contact_tag contact_tag [not null]
+}
+
+Table notification_settings {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  new_lead Boolean [not null, default: true]
+  appointment_booked Boolean [not null, default: true]
+  referral_earned Boolean [not null, default: true]
+  bill_due Boolean [not null, default: true]
+  automation_error Boolean [not null, default: true]
+  product_sold Boolean [not null, default: true]
+  created_at DateTime
+  updated_at DateTime
+  internal_notification Boolean [not null, default: true]
+}
+
+Table notifications {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  title String [not null]
+  details String
+  url String
+  status String [not null, default: 'unseen']
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table open_logs {
+  id Int [pk, increment]
+  message_id String [not null]
+  ip_address String [not null]
+  user_agent String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table opportunities {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  pipeline_id BigInt [not null]
+  stage_id BigInt [not null]
+  contact_id BigInt
+  contact_name String
+  contact_email String
+  contact_phone String
+  alternate_number String
+  company_name String
+  opportunity_name String
+  description String
+  status String
+  lead_value String
+  type String
+  opportunity_source String
+  initial_call_date DateTime
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  enquirer_user_id BigInt
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table order_details {
+  id BigInt [pk, increment]
+  order_id BigInt [not null]
+  product_id BigInt [not null]
+  variation String
+  price Float
+  tax Float
+  discount Float
+  coupon_discount String
+  shipping_cost String
+  quantity Int [not null, default: 1]
+  pickup_hub_id BigInt
+  product_referral_code String
+  is_refundable Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table orders {
+  id BigInt [pk, increment]
+  seller_id BigInt
+  user_id BigInt
+  delivery_hero_id BigInt
+  billing_address String
+  shipping_address String
+  delivery_status String [not null, default: 'pending']
+  payment_type String
+  payment_status String [not null, default: 'unpaid']
+  payment_details String
+  sub_total Float
+  discount Float
+  coupon_discount Float
+  total_tax Float
+  total_amount Float
+  shipping_cost Float
+  total_payable Float
+  code String
+  date DateTime
+  viewed Int [not null, default: 0]
+  delivery_viewed Int [not null, default: 0]
+  payment_status_viewed Int [not null, default: 0]
+  commission_calculated Int [not null, default: 0]
+  is_cancelled String [default: '0']
+  is_deleted String [default: '0']
+  trx_id String [not null]
+  is_mailed Boolean [not null, default: false]
+  offline_method_id String
+  offline_method_file String
+  status Boolean [not null, default: false]
+  pickup_hub_id BigInt
+  cancel_request Int [not null, default: 0]
+  cancel_request_at DateTime
+  delivery_hero_assign_at DateTime
+  created_by BigInt
+  is_draft Boolean [not null, default: false]
+  shipping_method String
+  is_coupon_system_active Boolean
+  tax_method String [not null, default: '{"vat_tax_type" : "","tax_type" : "" }']
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table overdue_notification_logs {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  overdue_before_3_days_mail Boolean [not null, default: false]
+  overdue_before_3_days_whatsapp Boolean [not null, default: false]
+  overdue_before_2_days_mail Boolean [not null, default: false]
+  overdue_before_2_days_whatsapp Boolean [not null, default: false]
+  overdue_before_1_days_mail Boolean [not null, default: false]
+  overdue_before_1_days_whatsapp Boolean [not null, default: false]
+  overdue_mail Boolean [not null, default: false]
+  overdue_whatsapp Boolean [not null, default: false]
+  overdue_after_1_days_mail Boolean [not null, default: false]
+  overdue_after_1_days_whatsapp Boolean [not null, default: false]
+  overdue_after_2_days_mail Boolean [not null, default: false]
+  overdue_after_2_days_whatsapp Boolean [not null, default: false]
+  overdue_after_3_days_mail Boolean [not null, default: false]
+  overdue_after_3_days_whatsapp Boolean [not null, default: false]
+  date DateTime [not null]
+  created_at DateTime
+  updated_at DateTime
+  overdue_push_notification Boolean [not null, default: false]
+}
+
+Table package_features {
+  id BigInt [pk, increment]
+  package_id BigInt [not null]
+  title String [not null]
+  hint String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table package_permission {
+  id BigInt [pk, increment]
+  package_id BigInt [not null]
+  permission_id BigInt [not null]
+  permission_name String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table package_purchase_logs {
+  id BigInt [pk, increment]
+  package_id BigInt [not null]
+  package_type String
+  user_id BigInt [not null]
+  txn_id String [not null]
+  response String [not null]
+  payment_gateway String [not null]
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table package_user {
+  id BigInt [pk, increment]
+  package_id BigInt [not null]
+  user_id BigInt [not null]
+  txn_id String [not null]
+  log_id BigInt [not null]
+  is_activated Boolean [not null, default: true]
+  log_type Int [not null, default: 0]
+  agency_plan_id BigInt [not null, default: 0]
+  subscription_started_at DateTime [not null]
+  subscription_ended_at DateTime [not null]
+  created_at DateTime
+  updated_at DateTime
+  amount_paid BigInt [not null, default: 0]
+  currency String [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table packages {
+  id BigInt [pk, increment]
+  name String [not null]
+  monthly_payment_plan_id BigInt
+  yearly_payment_plan_id BigInt
+  description String [not null]
+  type packages_type [not null, default: 'regular']
+  price Float [not null]
+  status Boolean [not null, default: true]
+  no_of_month BigInt [not null, default: 1]
+  discount Float [not null]
+  discount_type packages_discount_type [not null, default: 'fixed']
+  discount_start_at DateTime
+  discount_end_at DateTime
+  created_by String
+  updated_by String
+  email_credit BigInt [not null, default: 0]
+  whatsapp_credit BigInt [not null, default: 0]
+  sms_credit BigInt [not null, default: 0]
+  contacts BigInt
+  listing BigInt
+  automation_workshop BigInt
+  sub_user BigInt
+  searchyAi_assistant BigInt
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  permissions String
+  order BigInt [not null, default: 0]
+  product_limit BigInt [not null]
+  grace_period BigInt [not null, default: 0]
+  is_custom_plan Boolean [not null, default: false]
+  custom_plan_user_id BigInt
+  networking BigInt
+  whatsapp_devices BigInt
+  whatsapp_message BigInt
+  form_builder_limit BigInt
+  affiliate_clicks affiliate_clicks [not null]
+}
+
+Table page_languages {
+  id BigInt [pk, increment]
+  page_id BigInt [not null]
+  lang String [not null, default: 'en']
+  title String
+  address String
+  content String
+  meta_title String
+  meta_description String
+  keywords String
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pages {
+  id BigInt [pk, increment]
+  type String [not null]
+  link String
+  status Int [not null, default: 1]
+  content String
+  email String
+  optional_email String
+  phone String
+  optional_phone String
+  meta_image String
+  meta_image_id BigInt
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table partner_package_purchase_logs {
+  id BigInt [pk, increment]
+  affiliate_id BigInt
+  log_type Int [not null, default: 0]
+  package_purchase_log_id BigInt
+  amount Decimal [not null]
+  commission_earned Decimal [not null]
+  tds_deduction Decimal [not null, default: 0]
+  transfer_id String
+  transfer_on_hold Boolean
+  transfer_hold_till DateTime
+  transfer_amount Decimal [not null, default: 0]
+  tds_amount Decimal [not null, default: 0]
+  transfer_succeeded Boolean [not null, default: false]
+  error_log String
+  transfer_note String
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table partner_program_package_purchases {
+  id BigInt [pk, increment]
+  affiliate_id BigInt
+  program_package_id BigInt
+  start_date DateTime [not null]
+  end_date DateTime [not null]
+  next_renewal_date DateTime [not null]
+  purchase_amount Decimal [not null]
+  payment_status String [not null]
+  txn_id String [not null]
+  payment_response String
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+}
+
+Table partner_program_packages {
+  id BigInt [pk, increment]
+  name String [not null]
+  package_type Int [not null]
+  description String
+  amount Decimal [not null]
+  partner_percentage Decimal [not null]
+  plan_details String
+  image String
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table password_requests {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  otp Int [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table payment_histories {
+  id BigInt [pk, increment]
+  order_id BigInt [not null]
+  user_id BigInt
+  event String [not null]
+  remarks String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table payment_method {
+  id BigInt [pk, increment]
+  trx_id String [not null]
+  code String
+  api_token String
+  is_guest Int [not null, default: 0]
+  amount Float [not null, default: 0]
+  type String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table paymentz_permissions {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  permissions String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table pending_emails {
+  id Int [pk, increment]
+  user_id Int
+  ticket_id Int
+  type String
+  value String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table pending_user_emails {
+  id BigInt [pk, increment]
+  user_type String [not null]
+  user_id BigInt [not null]
+  email String [not null]
+  token String [not null]
+  created_at DateTime
+}
+
+Table pending_users {
+  id Int [pk, increment]
+  user_id Int
+  ticket_id Int
+  first_name String [not null]
+  last_name String [not null]
+  phone String
+  email String [unique, not null]
+  password String
+  address String
+  city String
+  role String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table permissions {
+  id Int [pk, increment]
+  name String
+  attribute String [not null]
+  keywords String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table persistences {
+  id Int [pk, increment]
+  user_id BigInt [not null]
+  code String [unique, not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table personal_access_tokens {
+  id BigInt [pk, increment]
+  tokenable_type String [not null]
+  tokenable_id BigInt [not null]
+  name String [not null]
+  token String [unique, not null]
+  abilities String
+  last_used_at DateTime
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table pickup_hub_languages {
+  id BigInt [pk, increment]
+  pickup_hub_id BigInt [not null]
+  name String [not null]
+  address String [not null]
+  lang String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table pickup_hubs {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  phone String
+  pick_up_status Int [not null, default: 1]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table pipelines {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  name String [not null]
+  default_contact_message Boolean [not null, default: false]
+  visible_funnel_chart Boolean [not null, default: false]
+  visible_pie_chart Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  position Int [not null, default: 0]
+  funnel_prebuilds funnel_prebuilds [not null]
+}
+
+Table pixels {
+  id Int [pk, increment]
+  name String [not null]
+  type pixels_type [not null]
+  value String [not null]
+  user_id Int [not null]
+  created_at DateTime
+  updated_at DateTime
+
+  indexes {
+    (name, user_id) [unique]
+  }
+}
+
+Table plans {
+  id Int [pk, increment]
+  product String [not null]
+  name String [not null]
+  description String [not null]
+  trial_days Int
+  currency String [not null]
+  decimals Int
+  plan_month String
+  plan_year String
+  amount_month Int
+  amount_year Int
+  visibility Int
+  color String [not null]
+  option_api Int
+  option_links Int
+  option_spaces Int
+  option_domains Int
+  option_stats Int
+  option_expiration Int
+  option_password Int
+  option_disabled Int
+  option_utm Int
+  option_global_domains Int [default: 1]
+  option_deep_links Int [default: 1]
+  coupons String
+  option_data_export Int [default: 1]
+  option_targeting Int [default: 1]
+  option_pixels Int [default: -1]
+  deleted_at DateTime
+}
+
+Table plans_email_verification_servers {
+  id Int [pk, increment]
+  server_id Int [not null]
+  plan_id Int [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table pma__bookmark {
+  id Int [pk, increment]
+  dbase String [not null, default: '']
+  user String [not null, default: '']
+  label String [not null, default: '']
+  query String [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__central_columns {
+  db_name String [not null]
+  col_name String [not null]
+  col_type String [not null]
+  col_length String
+  col_collation String [not null]
+  col_isNull Boolean [not null]
+  col_extra String [default: '']
+  col_default String
+
+  indexes {
+    (db_name, col_name) [pk]
+  }
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__column_info {
+  id Int [pk, increment]
+  db_name String [not null, default: '']
+  table_name String [not null, default: '']
+  column_name String [not null, default: '']
+  comment String [not null, default: '']
+  mimetype String [not null, default: '']
+  transformation String [not null, default: '']
+  transformation_options String [not null, default: '']
+  input_transformation String [not null, default: '']
+  input_transformation_options String [not null, default: '']
+
+  indexes {
+    (db_name, table_name, column_name) [unique]
+  }
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__designer_settings {
+  username String [pk]
+  settings_data String [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__export_templates {
+  id Int [pk, increment]
+  username String [not null]
+  export_type String [not null]
+  template_name String [not null]
+  template_data String [not null]
+
+  indexes {
+    (username, export_type, template_name) [unique]
+  }
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__favorite {
+  username String [pk]
+  tables String [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__history {
+  id BigInt [pk, increment]
+  username String [not null, default: '']
+  db String [not null, default: '']
+  table String [not null, default: '']
+  timevalue DateTime [default: `now()`, not null]
+  sqlquery String [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__navigationhiding {
+  username String [not null]
+  item_name String [not null]
+  item_type String [not null]
+  db_name String [not null]
+  table_name String [not null]
+
+  indexes {
+    (username, item_name, item_type, db_name, table_name) [pk]
+  }
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__pdf_pages {
+  db_name String [not null, default: '']
+  page_nr Int [pk, increment]
+  page_descr String [not null, default: '']
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__recent {
+  username String [pk]
+  tables String [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__relation {
+  master_db String [not null, default: '']
+  master_table String [not null, default: '']
+  master_field String [not null, default: '']
+  foreign_db String [not null, default: '']
+  foreign_table String [not null, default: '']
+  foreign_field String [not null, default: '']
+
+  indexes {
+    (master_db, master_table, master_field) [pk]
+  }
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__savedsearches {
+  id Int [pk, increment]
+  username String [not null, default: '']
+  db_name String [not null, default: '']
+  search_name String [not null, default: '']
+  search_data String [not null]
+
+  indexes {
+    (username, db_name, search_name) [unique]
+  }
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__table_coords {
+  db_name String [not null, default: '']
+  table_name String [not null, default: '']
+  pdf_page_number Int [not null, default: 0]
+  x Float [not null, default: 0]
+  y Float [not null, default: 0]
+
+  indexes {
+    (db_name, table_name, pdf_page_number) [pk]
+  }
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__table_info {
+  db_name String [not null, default: '']
+  table_name String [not null, default: '']
+  display_field String [not null, default: '']
+
+  indexes {
+    (db_name, table_name) [pk]
+  }
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__table_uiprefs {
+  username String [not null]
+  db_name String [not null]
+  table_name String [not null]
+  prefs String [not null]
+  last_update DateTime [default: `now()`, not null]
+
+  indexes {
+    (username, db_name, table_name) [pk]
+  }
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__tracking {
+  db_name String [not null]
+  table_name String [not null]
+  version Int [not null]
+  date_created DateTime [not null]
+  date_updated DateTime [not null]
+  schema_snapshot String [not null]
+  schema_sql String
+  data_sql String
+  tracking String
+  tracking_active Int [not null, default: 1]
+
+  indexes {
+    (db_name, table_name, version) [pk]
+  }
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__userconfig {
+  username String [pk]
+  timevalue DateTime [default: `now()`, not null]
+  config_data String [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__usergroups {
+  usergroup String [not null]
+  tab String [not null]
+  allowed pma__usergroups_allowed [not null, default: 'N']
+
+  indexes {
+    (usergroup, tab, allowed) [pk]
+  }
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pma__users {
+  username String [not null]
+  usergroup String [not null]
+
+  indexes {
+    (username, usergroup) [pk]
+  }
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table pr_activities {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  task_id BigInt
+  comment_id BigInt
+  field_changed String
+  old_value String
+  new_value String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table pr_assignees {
+  id BigInt [pk, increment]
+  task_id BigInt [not null]
+  user_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+  pr_tasks pr_tasks [not null]
+  users users [not null]
+}
+
+Table pr_attachments {
+  id BigInt [pk, increment]
+  task_id Int
+  comment_id Int
+  user_id Int
+  media_id BigInt
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table pr_backgrounds {
+  id BigInt [pk, increment]
+  bg String [not null, default: '#624b66']
+  image String
+  top String [not null, default: '#624b66']
+  color String [not null, default: '#ffffff']
+  type String [not null, default: 'default']
+  side String [not null]
+  user_id BigInt
+  users users
+}
+
+Table pr_board_lists {
+  id BigInt [pk, increment]
+  project_id BigInt [not null]
+  title String [not null]
+  order Int [not null, default: 0]
+  is_archive Int [not null, default: 0]
+  user_id BigInt
+  created_at DateTime
+  updated_at DateTime
+  pr_projects pr_projects [not null]
+  users users
+  pr_tasks pr_tasks [not null]
+}
+
+Table pr_check_lists {
+  id BigInt [pk, increment]
+  task_id BigInt [not null]
+  title String [not null]
+  is_done Int [not null, default: 0]
+  created_at DateTime
+  updated_at DateTime
+  pr_tasks pr_tasks [not null]
+}
+
+Table pr_comments {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  task_id BigInt [not null]
+  details String [not null]
+  created_at DateTime
+  updated_at DateTime
+  pr_tasks pr_tasks [not null]
+  users users [not null]
+}
+
+Table pr_labels {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  name String [not null]
+  color String [not null, default: 'lightgray']
+  color_name String
+  users users [not null]
+  pr_task_labels pr_task_labels [not null]
+}
+
+Table pr_projects {
+  id BigInt [pk, increment]
+  title String [not null]
+  slug String
+  background_id BigInt
+  user_id BigInt
+  workspace_id BigInt
+  description String
+  is_private Int [default: 0]
+  created_at DateTime
+  updated_at DateTime
+  pr_board_lists pr_board_lists [not null]
+  users users
+  pr_workspaces pr_workspaces
+  pr_recent_projects pr_recent_projects [not null]
+  pr_starred_projects pr_starred_projects [not null]
+  pr_tasks pr_tasks [not null]
+}
+
+Table pr_recent_projects {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  project_id BigInt [not null]
+  opened DateTime
+  created_at DateTime
+  updated_at DateTime
+  pr_projects pr_projects [not null]
+  users users [not null]
+}
+
+Table pr_settings {
+  id BigInt [pk, increment]
+  user_id BigInt
+  name String
+  slug String
+  type String
+  value String
+  created_at DateTime
+  updated_at DateTime
+  users users
+}
+
+Table pr_starred_projects {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  project_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+  pr_projects pr_projects [not null]
+  users users [not null]
+}
+
+Table pr_task_labels {
+  id BigInt [pk, increment]
+  task_id BigInt [not null]
+  label_id BigInt [not null]
+  pr_labels pr_labels [not null]
+  pr_tasks pr_tasks [not null]
+}
+
+Table pr_tasks {
+  id BigInt [pk, increment]
+  title String [not null]
+  slug String
+  is_done Int [not null, default: 0]
+  is_archive Int [not null, default: 0]
+  description String
+  cover Int
+  list_id BigInt [not null]
+  order Int [not null, default: 0]
+  user_id BigInt [not null]
+  project_id BigInt [not null]
+  due_date DateTime
+  created_at DateTime
+  updated_at DateTime
+  pr_assignees pr_assignees [not null]
+  pr_check_lists pr_check_lists [not null]
+  pr_comments pr_comments [not null]
+  pr_task_labels pr_task_labels [not null]
+  pr_board_lists pr_board_lists [not null]
+  pr_projects pr_projects [not null]
+  users users [not null]
+  pr_timers pr_timers [not null]
+}
+
+Table pr_team_members {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  workspace_id BigInt [not null]
+  added_by BigInt
+  role String [default: 'normal']
+  created_at DateTime
+  updated_at DateTime
+  users_pr_team_members_added_byTousers users
+  users_pr_team_members_user_idTousers users [not null]
+  pr_workspaces pr_workspaces [not null]
+}
+
+Table pr_timers {
+  id BigInt [pk, increment]
+  title String [not null]
+  user_id BigInt [not null]
+  task_id BigInt [not null]
+  duration Int [not null, default: 0]
+  started_at DateTime
+  stopped_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  pr_tasks pr_tasks [not null]
+  users users [not null]
+}
+
+Table pr_workspace_types {
+  id BigInt [pk, increment]
+  user_id BigInt
+  name String [not null]
+  created_at DateTime
+  updated_at DateTime
+  users users
+  pr_workspaces pr_workspaces [not null]
+}
+
+Table pr_workspaces {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  name String [not null]
+  slug String
+  type_id BigInt
+  website String
+  logo String
+  description String
+  created_at DateTime
+  updated_at DateTime
+  pr_projects pr_projects [not null]
+  pr_team_members pr_team_members [not null]
+  pr_workspace_types pr_workspace_types
+  users users [not null]
+}
+
+Table product_categories {
+  id BigInt [pk, increment]
+  parent_id BigInt
+  position Int
+  ordering Int [not null, default: 0]
+  slug String [not null]
+  commission Float [not null, default: 0]
+  is_featured Int [not null, default: 0]
+  status Int [not null, default: 1]
+  icon String
+  logo_id BigInt
+  logo String
+  banner_id BigInt
+  banner String
+  icon_location String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table product_category_languages {
+  id BigInt [pk, increment]
+  product_category_id BigInt [not null]
+  lang String [not null, default: 'en']
+  title String
+  meta_title String
+  meta_description String
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table product_custom_fields {
+  id BigInt [pk, increment]
+  product_id BigInt [not null]
+  field_name String [not null]
+  field_type Int [not null]
+  is_required Boolean [not null, default: false]
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table product_helps {
+  id BigInt [pk, increment]
+  name String [not null]
+  show_info_btn Boolean [not null, default: true]
+  show_video_btn Boolean [not null, default: true]
+  text_beside_label String
+  po_title String
+  po_content String
+  video_info_title String
+  video_link String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table product_languages {
+  id BigInt [pk, increment]
+  product_id BigInt [not null]
+  lang String [not null, default: 'en']
+  name String [not null]
+  short_description String
+  description String
+  pdf_specification_id BigInt
+  pdf_specification String
+  tags String
+  unit String
+  meta_title String
+  meta_description String
+  meta_keywords String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table product_stocks {
+  id BigInt [pk, increment]
+  variant_ids String
+  product_id BigInt [not null]
+  name String
+  sku String
+  current_stock Int [not null, default: 0]
+  price Float
+  image String
+  image_id BigInt
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table product_vat_taxes {
+  id BigInt [pk, increment]
+  product_id BigInt [not null]
+  vat_tax_id BigInt [not null]
+  amount Float
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table product_views {
+  id BigInt [pk, increment]
+  user_id BigInt
+  product_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table products {
+  id BigInt [pk, increment]
+  brand_id BigInt
+  category_id BigInt
+  sub_category_id BigInt
+  micro_category_id BigInt
+  user_id BigInt
+  pipeline_id BigInt
+  stage_id BigInt
+  sales_plan_id BigInt
+  enable_buy_now Boolean [not null, default: false]
+  enable_enquire_now Boolean [not null, default: true]
+  enable_appointment Boolean [not null, default: false]
+  enable_custom_link Boolean [not null, default: false]
+  custom_link String
+  event_type_id Int
+  enquiry_type String
+  created_by BigInt [not null]
+  slug String [not null]
+  price Float
+  show_price Boolean [not null, default: true]
+  special_discount Float
+  special_discount_type String
+  special_discount_start DateTime
+  special_discount_end DateTime
+  purchase_cost Float
+  barcode String
+  video_provider String
+  video_url String
+  colors String
+  attribute_sets String
+  vat_taxes String
+  has_variant Int [not null, default: 0]
+  selected_variants String
+  selected_variants_ids String
+  thumbnail String
+  images String
+  description_images String
+  thumbnail_id String
+  image_ids String
+  current_stock Int [not null]
+  minimum_order_quantity Int [not null, default: 1]
+  stock_notification Int [not null, default: 0]
+  low_stock_to_notify Int
+  stock_visibility products_stock_visibility [not null, default: 'hide_stock']
+  total_sale BigInt [not null, default: 0]
+  status products_status [not null, default: 'unpublished']
+  is_approved Int [not null, default: 0]
+  is_catalog Int [not null, default: 0]
+  external_link String
+  is_featured Int [not null, default: 0]
+  is_classified Int [not null, default: 0]
+  is_wholesale Int [not null, default: 0]
+  contact_info String
+  is_digital Int [not null, default: 0]
+  is_refundable Int [not null, default: 0]
+  todays_deal Int [not null, default: 0]
+  rating Float [not null, default: 0]
+  viewed BigInt [not null, default: 0]
+  shipping_type String
+  shipping_fee Float
+  shipping_fee_depend_on_quantity Int [not null, default: 0]
+  estimated_shipping_days String
+  cash_on_delivery Int [not null, default: 0]
+  meta_image String
+  product_link String
+  product_file String
+  product_file_id BigInt
+  meta_image_id String
+  reward Float
+  is_deleted Int [not null, default: 0]
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  product_brochure_pdf String [not null]
+  product_brochure_pdf_ids String
+  product_brochure_image String [not null]
+  product_brochure_image_ids String
+  tags String
+  videos String
+  reasons Json
+  button_title String
+  redirect_link String
+  pixel_id String
+  last_status String
+  total_inquired BigInt [not null, default: 0]
+  position Int [default: 0]
+  total_visits BigInt [not null, default: 0]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table project_files {
+  id BigInt [pk, increment]
+  related_to String
+  related_id BigInt
+  file String [not null]
+  user_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table projects {
+  id BigInt [pk, increment]
+  name String [not null]
+  user_id BigInt [not null]
+  status String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table refunds {
+  id BigInt [pk, increment]
+  user_id BigInt
+  order_id BigInt
+  order_detail_id BigInt
+  seller_id BigInt
+  processed_by BigInt
+  total_amount Float
+  shipping_cost Float
+  refund_amount Float
+  payment_type String
+  payment_details String
+  exchange_rate Float [default: 1]
+  seller_approval String [not null, default: 'pending']
+  admin_approval String [not null, default: 'pending']
+  status String [not null, default: 'pending']
+  reject_reason String
+  remark String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table registration_requests {
+  id BigInt [pk, increment]
+  first_name String
+  last_name String
+  phone String
+  otp BigInt
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table reminders {
+  id Int [pk, increment]
+  user_id BigInt [not null]
+  code String [not null]
+  completed Boolean [not null, default: false]
+  completed_at DateTime
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table replicate_histories {
+  id BigInt [pk, increment]
+  replicatiobale_type String [not null]
+  replicatiobale_id BigInt [not null]
+  user_id BigInt [not null]
+  replicate_id BigInt [not null]
+  old_uuid String
+  uuid String
+  data String
+  created_at DateTime
+  updated_at DateTime
+  snapshot_id BigInt
+  snapshots snapshots
+  users users [not null]
+}
+
+Table replies {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  device_id BigInt [not null]
+  template_id BigInt
+  keyword String
+  reply String
+  match_type String [not null, default: 'equal']
+  reply_type String [not null, default: 'text']
+  api_key String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table requirement_queries {
+  id BigInt [pk, increment]
+  email String [not null]
+  phone String [not null]
+  product String
+  city String
+  location_id String
+  user_id BigInt
+  user_type String
+  description String
+  created_at DateTime
+  updated_at DateTime
+  quantity BigInt [not null, default: 0]
+  name String
+  category BigInt
+  sub_category BigInt
+}
+
+Table review_likes {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  reviewable_type String [not null]
+  reviewable_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table review_replies {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  review_id BigInt [not null]
+  parent_id BigInt
+  reply String
+  images String
+  level Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table reviews {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  product_id BigInt [not null]
+  status Boolean [not null, default: false]
+  title String
+  rating Float [not null, default: 0]
+  comment String
+  images String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table reward_details {
+  id BigInt [pk, increment]
+  reward_id BigInt [not null]
+  product_id BigInt [not null]
+  product_qty BigInt [not null]
+  reward BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table rewards {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  rewards Float [not null, default: 0]
+  last_converted DateTime
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table role_users {
+  user_id BigInt [not null]
+  role_id Int [not null]
+  created_at DateTime
+  updated_at DateTime
+
+  indexes {
+    (user_id, role_id) [pk]
+  }
+}
+
+Table roles {
+  id Int [pk, increment]
+  slug String [unique, not null]
+  name String [not null]
+  permissions String
+  created_at DateTime
+  updated_at DateTime
+  agency_id BigInt [not null, default: 0]
+}
+
+Table round_robin_assignment_automations {
+  id BigInt [pk, increment]
+  automation_id Int [not null]
+  action_id Int [not null]
+  staff_id BigInt [not null]
+  weight Int [default: 1]
+  assigned Int [default: 0]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table schedule_settings {
+  id Int [pk, increment]
+  name String
+  slug String
+  type String
+  value String
+}
+
+Table schedulecontacts {
+  id BigInt [pk, increment]
+  contact_id BigInt
+  schedulemessage_id BigInt
+  status_code Int
+}
+
+Table schedulemessages {
+  id BigInt [pk, increment]
+  user_id BigInt
+  device_id BigInt
+  template_id BigInt
+  title String
+  body String
+  schedule_at DateTime
+  zone String
+  date DateTime
+  time DateTime
+  status String [not null, default: 'pending']
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table searches {
+  id BigInt [pk, increment]
+  query String [not null]
+  total_search BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table seller_ai_staff_permissions {
+  id BigInt [pk, increment]
+  staff_id BigInt [not null]
+  user_id BigInt [not null]
+  module String [not null]
+  permission String [not null]
+  created_at DateTime
+  updated_at DateTime
+  seller_staffs seller_staffs [not null]
+  users users [not null]
+
+  indexes {
+    (staff_id, module, permission) [unique]
+  }
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table seller_custom_domains {
+  id BigInt [pk, increment]
+  domain_id BigInt
+  user_id BigInt [not null]
+  domain String [not null]
+  dns_verified Boolean [not null, default: false]
+  dns_verified_at DateTime
+  conf_applied Boolean [not null, default: false]
+  conf_applied_at DateTime
+  ssl_certificate_id Int
+  ssl_activated_at DateTime
+  raw_response String
+  created_at DateTime
+  updated_at DateTime
+  status Boolean [not null, default: false]
+  version String [not null, default: '000']
+  version_android String [not null, default: '000']
+  is_seller_domain Int [not null, default: 0]
+  dns_queue Int [not null, default: 0]
+  deleted_at DateTime
+  is_removed_from_server Boolean [not null, default: false]
+  removed_from_server_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table seller_events {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  type Int [not null, default: 0]
+  title String [not null]
+  link String [not null]
+  date_time DateTime [not null]
+  description String [not null]
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table seller_facebook_leads {
+  id BigInt [pk, increment]
+  user_id BigInt
+  facebook_id String
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+}
+
+Table seller_notes {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  note String [not null]
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table seller_payouts {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  amount Float
+  message String
+  payment_to String
+  payment_by String
+  payment_from String
+  status seller_payouts_status [not null, default: 'pending']
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table seller_profile_user {
+  id BigInt [pk, increment]
+  seller_profile_id BigInt [not null]
+  user_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table seller_staff_model_has_permissions {
+  permission_id BigInt [not null]
+  model_type String [not null]
+  model_id BigInt [not null]
+
+  indexes {
+    (permission_id, model_id, model_type) [pk]
+  }
+}
+
+Table seller_staff_model_has_roles {
+  role_id BigInt [not null]
+  model_type String [not null]
+  model_id BigInt [not null]
+
+  indexes {
+    (role_id, model_id, model_type) [pk]
+  }
+}
+
+Table seller_staff_permissions {
+  id BigInt [pk, increment]
+  name String [not null]
+  feature_name String
+  guard_name String [not null]
+  sort Int [not null, default: 0]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table seller_staff_role_has_permissions {
+  permission_id BigInt [not null]
+  role_id BigInt [not null]
+
+  indexes {
+    (permission_id, role_id) [pk]
+  }
+}
+
+Table seller_staff_roles {
+  id BigInt [pk, increment]
+  name String [not null]
+  guard_name String [not null]
+  created_at DateTime
+  updated_at DateTime
+
+  indexes {
+    (name, guard_name) [unique]
+  }
+}
+
+Table seller_staffs {
+  id BigInt [pk, increment]
+  seller_id BigInt [not null]
+  user_id BigInt [not null]
+  type seller_staffs_type [not null, default: 'human']
+  ai_prompt String
+  ai_selected_model String
+  ai_is_active Boolean [not null, default: true]
+  ai_settings Json
+  agent_id String
+  inbox_read Boolean [not null, default: false]
+  inbox_reply Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  agency_id BigInt [not null, default: 0]
+  seller_ai_staff_permissions seller_ai_staff_permissions [not null]
+}
+
+Table sellers {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  shop_name String [not null]
+  slug String [not null]
+  verified_at DateTime
+  license_no String
+  tax_paper String
+  logo String
+  banner String
+  shop_page_contents String
+  mobile_shop_page_contents String
+  shop_banner_id BigInt
+  shop_banner String
+  shop_tagline String
+  seller_country_id BigInt
+  phone_no String
+  address String
+  rating_count Float [default: 0]
+  reviews_count BigInt [default: 0]
+  facebook String
+  google String
+  twitter String
+  youtube String
+  meta_title String
+  meta_description String
+  created_at DateTime
+  updated_at DateTime
+  about String
+  header_script String
+  body_script String
+  total_visits BigInt [not null, default: 0]
+  terms_of_service String
+  privacy_policy String
+  refund_policy String
+  shop_banner_video String
+  video_upload_location String
+  city_id BigInt
+  banner_video_link String
+  show_call_number Boolean [not null, default: false]
+  wa_number String
+  show_wa_number Boolean [not null, default: false]
+  paid_account Boolean [not null, default: false]
+  category_id BigInt
+  sub_category_id BigInt
+  topics String
+  linkedin String
+  leader_name String
+  job_position String
+  leader_profile String
+  website_link String
+  legal_name String
+  gst_response String
+  aadhar_number String
+  aadhar_number_verified_at DateTime
+  aadhar_number_ref_id String
+  aadhar_number_response String
+  logo_id BigInt
+  banner_id BigInt
+  leader_profile_id BigInt
+  leader_about String
+  package_sort_id Int
+  total_inquired BigInt [not null, default: 0]
+  show_address Boolean [not null, default: false]
+  published_on_searchy Boolean [not null, default: true]
+  agency_id BigInt [not null, default: 0]
+}
+
+Table sender_sms {
+  id BigInt [pk, increment]
+  sender_name String [not null]
+  sms_user_id Int [not null]
+  PEID String [not null]
+  approved Int [not null, default: 0]
+  is_deleted Int [not null, default: 0]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table senders {
+  id Int [pk, increment]
+  uid String [not null]
+  customer_id Int [not null]
+  name String [not null]
+  email String [not null]
+  status String [not null]
+  created_at DateTime
+  updated_at DateTime
+  sending_server_id Int
+}
+
+Table sending_servers {
+  id BigInt [pk, increment]
+  uid String [not null]
+  admin_id BigInt
+  customer_id BigInt
+  bounce_handler_id BigInt
+  feedback_loop_handler_id BigInt
+  name String [not null]
+  type String [not null]
+  host String
+  aws_access_key_id String
+  aws_secret_access_key String
+  aws_region String
+  domain String
+  api_key String
+  smtp_username String
+  smtp_password String
+  smtp_port Int
+  smtp_protocol String
+  sendmail_path String
+  quota_value Int [not null]
+  quota_base Int [not null]
+  quota_unit String [not null]
+  status String [not null]
+  api_secret_key String
+  quota Bytes
+  default_from_email String
+  options String
+  username String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table server_configs {
+  id BigInt [pk, increment]
+  name String [not null]
+  value String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table server_side_events {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  type String
+  model String
+  operation String
+  current BigInt [not null, default: 0]
+  total BigInt [not null, default: 0]
+  is_completed Boolean [not null, default: false]
+  data String
+  created_at DateTime
+  updated_at DateTime
+  bulk_operations bulk_operations [not null]
+  users users [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table service_languages {
+  id BigInt [pk, increment]
+  service_id BigInt [not null]
+  lang String [not null]
+  title String [not null]
+  sub_title String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table services {
+  id BigInt [pk, increment]
+  position Int [not null, default: 1]
+  url String
+  image String
+  image_id BigInt
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table sessions {
+  id String [pk]
+  user_id BigInt
+  ip_address String
+  user_agent String
+  payload String [not null]
+  last_activity Int [not null]
+}
+
+Table settings {
+  id BigInt [pk, increment]
+  lang String [default: 'en']
+  title String
+  value String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table sliders {
+  id BigInt [pk, increment]
+  order Int [not null]
+  status Boolean [not null, default: true]
+  for_mobile Boolean [not null, default: false]
+  action_type String [not null]
+  link String [not null, default: '/']
+  bg_image String
+  bg_image_id BigInt
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table sms_template {
+  id BigInt [pk, increment]
+  EntityID String [not null]
+  TemplateID String [not null]
+  title String [not null]
+  template String [not null]
+  seller_id Int [not null]
+  created_at DateTime
+  updated_at DateTime
+  service_type sms_template_service_type [not null, default: 'TRANS']
+  is_deleted Boolean [not null, default: false]
+  sender_id Int [not null]
+}
+
+Table sms_user {
+  id BigInt [pk, increment]
+  username String [not null]
+  password String [not null]
+  email String [not null]
+  phone_no String [not null]
+  seller_id Int [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table smstransactions {
+  id BigInt [pk, increment]
+  user_id BigInt
+  device_id BigInt
+  app_id BigInt
+  template_id BigInt
+  from String
+  to String
+  type String [default: 'from_api']
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table snapshot_purchase_transactions {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  snapshot_id BigInt [not null]
+  payment_id BigInt
+  plan_id BigInt
+  transaction_id String
+  amount Decimal
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table snapshot_subaccounts {
+  id BigInt [pk, increment]
+  snapshot_id BigInt [not null]
+  sub_account_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+  snapshots snapshots [not null]
+}
+
+Table snapshots {
+  id BigInt [pk, increment]
+  uuid String [not null]
+  type String [not null]
+  admin_id BigInt [not null]
+  name String [not null]
+  created_at DateTime
+  updated_at DateTime
+  template_name String
+  snapshot_template_image_id String
+  category_name String
+  is_template Boolean [not null, default: false]
+  template_status Boolean [not null, default: false]
+  version String [not null, default: '1']
+  plan_id BigInt
+  snapshot_id BigInt
+  rejection_reason String
+  agency_plans agency_plans [not null]
+  module_items module_items [not null]
+  replicate_histories replicate_histories [not null]
+  snapshot_subaccounts snapshot_subaccounts [not null]
+}
+
+Table spaces {
+  id Int [pk, increment]
+  user_id Int [not null]
+  name String [not null]
+  color Int
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table staff_devices {
+  id BigInt [pk, increment]
+  staff_id BigInt [not null]
+  device_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+  devices devices [not null]
+  users users [not null]
+
+  indexes {
+    (staff_id, device_id) [unique]
+  }
+}
+
+Table staff_substaff {
+  id BigInt [pk, increment]
+  parent_id BigInt [not null]
+  staff_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table stages {
+  id BigInt [pk, increment]
+  pipeline_id BigInt [not null]
+  name String [not null]
+  default_contact_message Boolean [not null, default: false]
+  order BigInt [not null]
+  visible_funnel_chart Boolean [not null, default: false]
+  visible_pie_chart Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+}
+
+Table states {
+  id BigInt [pk, increment]
+  name String [not null]
+  country_id BigInt [not null]
+  latitude Decimal
+  longitude Decimal
+  status Int [not null, default: 1]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table stats {
+  link_id Int [not null]
+  name stats_name [not null]
+  value String [not null]
+  count BigInt [not null, default: 1]
+  date DateTime [not null]
+
+  indexes {
+    (link_id, name, value, date) [pk]
+  }
+}
+
+Table subscriber_fields {
+  id Int [pk, increment]
+  subscriber_id Int [not null]
+  field_id Int [not null]
+  value String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table subscribers {
+  id BigInt [pk, increment]
+  email String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table subscription_items {
+  id BigInt [pk, increment]
+  subscription_id BigInt [not null]
+  stripe_id String [not null]
+  stripe_plan String [not null]
+  quantity Int [not null]
+  created_at DateTime
+  updated_at DateTime
+
+  indexes {
+    (subscription_id, stripe_plan) [unique]
+  }
+}
+
+Table subscriptions {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  name String [not null]
+  stripe_id String [not null]
+  stripe_status String [not null]
+  stripe_plan String
+  quantity Int
+  trial_ends_at DateTime
+  ends_at DateTime
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table super_agencies {
+  id BigInt [pk, increment]
+  manager_agency_id BigInt [not null]
+  wallet_balance Decimal [not null, default: 1]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table super_agency_wallet_transaction_details {
+  id BigInt [pk, increment]
+  wallet_transaction_id BigInt [not null]
+  transaction_id String
+  gateway String
+  payment_response String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table super_agency_wallet_transactions {
+  id BigInt [pk, increment]
+  super_agency_id BigInt [not null]
+  transaction_type String [not null, default: 'credit']
+  transaction_time DateTime [not null]
+  wallet_change Decimal [not null]
+  amount Decimal
+  status Boolean [not null, default: false]
+  related_agency_id BigInt
+  extend_duration Int
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table support_department_languages {
+  id BigInt [pk, increment]
+  title String [not null]
+  support_department_id String [not null]
+  lang String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table support_departments {
+  id BigInt [pk, increment]
+  slug String
+  status Int [not null, default: 1]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table supports {
+  id BigInt [pk, increment]
+  subject String [not null]
+  support_department_id String [not null]
+  priority String [not null]
+  status String [not null]
+  user_id Int [not null]
+  ticket_id String [not null]
+  viewed Int [not null, default: 0]
+  client_viewed Int [not null, default: 0]
+  file String
+  ticket_body String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table tags {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  name String [not null]
+  type Int [not null, default: 0]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table tasks {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  opportunity_id BigInt
+  contact_id BigInt
+  assignee BigInt
+  title String [not null]
+  description String [not null]
+  due_date DateTime [not null]
+  completed Boolean [not null, default: false]
+  completed_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+}
+
+Table template_categories {
+  id Int [pk, increment]
+  uid String [not null]
+  name String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table templates {
+  id BigInt [pk, increment]
+  uuid String [unique, not null]
+  user_id BigInt
+  title String
+  body String
+  type String
+  status Int [not null, default: 1]
+  created_at DateTime
+  updated_at DateTime
+  archived_at DateTime
+  funnel_prebuilds funnel_prebuilds [not null]
+  users users
+}
+
+Table templates_categories {
+  id Int [pk, increment]
+  template_id Int [not null]
+  category_id Int [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table theme_options {
+  id BigInt [pk, increment]
+  name String [not null]
+  options String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table throttle {
+  id Int [pk, increment]
+  user_id BigInt
+  type String [not null]
+  ip String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table ticket_replays {
+  id BigInt [pk, increment]
+  ticket_id String [not null]
+  support_id String
+  file String
+  file_id String
+  replay String
+  type String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table timelines {
+  id Int [pk, increment]
+  uid String [not null]
+  automation2_id Int [not null]
+  subscriber_id BigInt
+  auto_trigger_id Int [not null]
+  activity String [not null]
+  created_at DateTime
+  updated_at DateTime
+  activity_type String [not null]
+}
+
+Table timezones {
+  id BigInt [pk, increment]
+  country_code String [not null]
+  timezone String [not null]
+  gmt_offset String [not null]
+  dst_offset String [not null]
+  raw_offset String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table todos {
+  id BigInt [pk, increment]
+  user_id BigInt
+  title String
+  description String
+  date DateTime
+  related_to String
+  related_id BigInt
+  completed Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  contact_id BigInt
+  user_type String [not null, default: 'App\Models\User']
+  users users
+}
+
+Table tracking_domains {
+  id BigInt [pk, increment]
+  uid String [not null]
+  customer_id Int [not null]
+  name String [not null]
+  status String [not null]
+  created_at DateTime
+  updated_at DateTime
+  scheme String [not null]
+}
+
+Table tracking_logs {
+  id Int [pk, increment]
+  runtime_message_id String [unique]
+  message_id String [unique]
+  customer_id Int [not null]
+  sending_server_id BigInt
+  campaign_id Int [not null]
+  subscriber_id Int [not null]
+  status String [not null]
+  error String
+  created_at DateTime
+  updated_at DateTime
+  auto_trigger_id Int
+  sub_account_id Int
+  email_id Int
+  is_read Boolean [not null, default: false]
+  read_from String
+  read_ip String
+  read_times String [not null, default: '0']
+  is_clicked Boolean [not null, default: false]
+  clicked_from String
+  clicked_ip String
+  clicked_times String [not null, default: '0']
+  is_skipped Boolean [not null, default: false]
+  is_bounced Boolean [not null, default: false]
+  is_replied Boolean [not null, default: false]
+  is_complained Boolean [not null, default: false]
+  reason String
+  is_unsubscribed Boolean [not null, default: false]
+  auto_triggers auto_triggers
+}
+
+Table transcripts {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  url String
+  transcript String
+  title String
+  workbook String
+  task String
+  words Int
+  format String
+  audio_type String
+  description String
+  storage String
+  length Decimal
+  plan_type String
+  size String
+  file_name String
+  temp_name String
+  expires_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  users users [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table ui_conversations {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  contact_id BigInt
+  group_id BigInt
+  last_message_id BigInt
+  last_message_content String
+  last_message_channel ui_conversations_last_message_channel
+  last_message_time DateTime
+  unread_count Int [not null, default: 0]
+  starred Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  sent_type ui_conversations_sent_type [not null, default: 'automatic']
+  last_whatsapp_device_id BigInt
+  is_pinned Boolean [not null, default: false]
+  contacts contacts
+  users users [not null]
+}
+
+Table ui_group_participants {
+  id BigInt [pk, increment]
+  group_id BigInt [not null]
+  contact_id BigInt [not null]
+  role ui_group_participants_role [not null, default: 'member']
+  joined_at DateTime
+  left_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  contacts contacts [not null]
+  ui_groups ui_groups [not null]
+
+  indexes {
+    (group_id, contact_id) [unique]
+  }
+}
+
+Table ui_groups {
+  id BigInt [pk, increment]
+  name String [not null]
+  members_count Int [not null, default: 0]
+  description String [not null]
+  restrict Boolean [not null, default: false]
+  announce Boolean [not null, default: false]
+  creator_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+  device_id BigInt
+  wa_group_id String
+  response_raw String
+  invite_link String
+  ui_group_participants ui_group_participants [not null]
+  users users [not null]
+}
+
+Table ui_message_attachments {
+  id BigInt [pk, increment]
+  conversation_id BigInt [not null]
+  message_id BigInt [not null]
+  path String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table ui_message_receipts {
+  id BigInt [pk, increment]
+  message_id BigInt [not null]
+  contact_id BigInt [not null]
+  status ui_message_receipts_status [not null, default: 'sent']
+  updated_at DateTime [default: `now()`, not null]
+}
+
+Table ui_messages {
+  id BigInt [pk, increment]
+  conversation_id BigInt [not null]
+  channel ui_messages_channel
+  type ui_messages_type [not null, default: 'text']
+  is_outgoing Int [not null, default: 1]
+  content String
+  created_at DateTime
+  updated_at DateTime
+  status Int [not null, default: 1]
+  status_reason String
+  message_id String
+  sent_by BigInt
+}
+
+Table ui_scheduled_messages {
+  id BigInt [pk, increment]
+  channel String [not null]
+  conversation_id String [not null]
+  raw_message String [not null]
+  staff_id BigInt
+  scheduled_at DateTime [not null]
+  status String [not null, default: 'pending']
+  sent_at DateTime
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table unsubscription_logs {
+  id BigInt [pk, increment]
+  contact_id BigInt [not null]
+  message_id String
+  reason String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table uploads {
+  id BigInt [pk, increment]
+  session_id String [not null]
+  file_name String [not null]
+  total_chunks Int [not null]
+  uploaded_chunks Int [not null]
+  status String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table url_domains {
+  id Int [pk, increment]
+  name String [not null]
+  index_page String
+  not_found_page String
+  user_id Int [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table url_pages {
+  id Int [pk, increment]
+  title String [not null]
+  slug String [not null]
+  footer Int [not null]
+  content String [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table url_settings {
+  name String [pk]
+  value String
+}
+
+Table user_app_details {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  app_name String [not null]
+  lms_domain String
+  accounts_domain String
+  accounts_site_id BigInt
+  accounts_verification_step Int [not null, default: 0]
+  networking_domain String
+  community_domain String
+  community_api_secret String
+  notification_api_key String
+  notification_app_id String
+  logo String
+  banner String
+  infinity_loader String
+  favicon String
+  icon_color String
+  top_header_icon_color String
+  sidebar_icon_color String
+  primary_color String
+  primary_color_dark String
+  left_menu_bar_color String
+  top_menu_bar_color String
+  font_color String
+  font_style String
+  border_color String
+  font_hover_color String
+  meta_title String
+  meta_description String
+  active Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  users users [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table user_credit_transactions {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  agency_id BigInt [not null]
+  credits_purchased BigInt [not null]
+  free_credit BigInt [not null, default: 0]
+  transaction_date DateTime [default: `now()`, not null]
+  amount Decimal [not null, default: 0]
+  transaction_id String
+  gateway String
+  payment_response String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table user_credits {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  agency_id BigInt [not null]
+  remaining_credits Decimal [not null, default: 0]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table user_email_credit_usage_logs {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  tracking_log_id BigInt [not null]
+  credit_usage Int [not null, default: 1]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table user_email_credits {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  credits BigInt [not null]
+  notify_low_credits Boolean [not null, default: false]
+  notify_warning_low_credits Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+}
+
+Table user_email_credits_purchase_logs {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  transaction_id String
+  gateway String
+  credits Int [not null]
+  price Int [not null]
+  plan_type Int [not null, default: 0]
+  agency_plan_id BigInt [not null, default: 0]
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table user_inactive_notifications {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  date DateTime [not null]
+  inacitve_since_3_email Boolean [not null, default: false]
+  inacitve_since_6_email Boolean [not null, default: false]
+  inacitve_since_10_whatsapp Boolean [not null, default: false]
+  inacitve_since_15_email Boolean [not null, default: false]
+  inacitve_since_20_whatsapp Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table user_locking_logs {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  locking_details String
+  is_reverted Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  users users [not null]
+}
+
+Table user_preferences {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  dashboard_settings String
+  community_portal_settings String
+  community_default_page String
+  phone_visibility_enabled Boolean [not null, default: false]
+  crm_view_type Boolean [not null, default: false]
+  crm_preview_fields String
+  crm_filters String
+  receive_course_access_emails Boolean [not null, default: true]
+  created_at DateTime
+  updated_at DateTime
+  users users [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table user_settings {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  all_sub_accounts_access Boolean [not null, default: true]
+  all_white_label_access Boolean [not null, default: true]
+  created_at DateTime
+  updated_at DateTime
+  users users [not null]
+}
+
+Table user_sms_credit_purchase_logs {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  transaction_id String
+  gateway String
+  payment_response String
+  type Int [not null, default: 0]
+  credits Int [not null]
+  price Decimal [not null]
+  is_processed Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  users users [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table user_socials {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  title String [not null]
+  icon String [not null]
+  link String [not null]
+  created_at DateTime
+  updated_at DateTime
+  users users [not null]
+}
+
+Table user_subaccounts {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  subaccount_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+  users_user_subaccounts_subaccount_idTousers users [not null]
+  users_user_subaccounts_user_idTousers users [not null]
+}
+
+Table users {
+  id BigInt [pk, increment]
+  email String
+  phone String
+  password String
+  pin Int
+  permissions String
+  first_name String
+  last_name String
+  user_type users_user_type [not null]
+  timezone String [default: 'Asia/Calcutta']
+  country String [not null, default: 'India']
+  country_code String [not null, default: 'IN']
+  gender String [default: 'male']
+  date_of_birth DateTime
+  status Int [not null, default: 1]
+  is_protected Boolean [not null, default: false]
+  last_status Int
+  uid String
+  is_user_banned Int [not null, default: 0]
+  newsletter_enable Int [not null, default: 0]
+  otp Int
+  firebase_auth_id String
+  notification_device_ids String
+  currency_id String [default: '1']
+  lang_code String [default: 'en']
+  is_password_set Int [not null, default: 1]
+  images String
+  socials String
+  last_login DateTime
+  last_ip String
+  last_password_change DateTime
+  image_id BigInt
+  role_id Int
+  pickup_hub_id BigInt
+  balance Float
+  identity_provider_access_token String
+  is_deleted Boolean [not null, default: false]
+  created_at DateTime
+  updated_at DateTime
+  total_ai_messages BigInt [not null, default: 0]
+  total_ai_messages_by_month BigInt [not null, default: 0]
+  is_notification_sent Boolean [not null, default: false]
+  notification_sent_at DateTime
+  no_more_activation_message Boolean [not null, default: false]
+  switched_user_type String
+  is_premium_user Boolean [not null, default: false]
+  white_label_domain String
+  is_school_app Boolean [not null, default: false]
+  is_individual_school Boolean [not null, default: false]
+  school_app_domain String
+  app_type Int [not null, default: 0]
+  staff_user_id BigInt
+  agency_id BigInt [not null, default: 0]
+  is_super_agency Boolean [not null, default: false]
+  sms_api_secret String
+  my_operator_api_token String
+  my_operator_company_id String
+  my_operator_secret_token String
+  my_operator_x_api_key String
+  my_operator_user_id String
+  my_operator_public_ivr_id String
+  zoom_personal_meeting_url String
+  assigned_staff_ids Json
+  stage_id BigInt
+  ivr_pipeline BigInt
+  tags String
+  is_pinned Boolean [not null, default: false]
+  admin_chat_support admin_chat_support [not null]
+  agency_affiliate_settings agency_affiliate_settings [not null]
+  agency_cancellations agency_cancellations [not null]
+  announcement_banner_analytics announcement_banner_analytics [not null]
+  announcement_banner_dismissals announcement_banner_dismissals [not null]
+  app_store app_store [not null]
+  bulk_operations bulk_operations [not null]
+  chat_widgets_chat_widgets_assigned_user_idTousers chat_widgets [not null]
+  chat_widgets_chat_widgets_user_idTousers chat_widgets [not null]
+  community_announcements community_announcements [not null]
+  community_channels community_channels [not null]
+  community_custom_links community_custom_links [not null]
+  community_follows community_follows [not null]
+  community_groups community_groups [not null]
+  contact_documents contact_documents [not null]
+  crm_quick_filters crm_quick_filters [not null]
+  custom_menu_users custom_menu_users [not null]
+  email_server_configs email_server_configs [not null]
+  event_type_locations event_type_locations [not null]
+  event_type_staff_details event_type_staff_details [not null]
+  events events [not null]
+  folders folders [not null]
+  funnel_folders funnel_folders [not null]
+  ingestion_events ingestion_events [not null]
+  instagram_webhook_logs instagram_webhook_logs [not null]
+  integrations integrations [not null]
+  knowledge_items knowledge_items [not null]
+  landing_page_versions landing_page_versions [not null]
+  llm_providers llm_providers [not null]
+  pr_assignees pr_assignees [not null]
+  pr_backgrounds pr_backgrounds [not null]
+  pr_board_lists pr_board_lists [not null]
+  pr_comments pr_comments [not null]
+  pr_labels pr_labels [not null]
+  pr_projects pr_projects [not null]
+  pr_recent_projects pr_recent_projects [not null]
+  pr_settings pr_settings [not null]
+  pr_starred_projects pr_starred_projects [not null]
+  pr_tasks pr_tasks [not null]
+  pr_team_members_pr_team_members_added_byTousers pr_team_members [not null]
+  pr_team_members_pr_team_members_user_idTousers pr_team_members [not null]
+  pr_timers pr_timers [not null]
+  pr_workspace_types pr_workspace_types [not null]
+  pr_workspaces pr_workspaces [not null]
+  replicate_histories replicate_histories [not null]
+  seller_ai_staff_permissions seller_ai_staff_permissions [not null]
+  server_side_events server_side_events [not null]
+  staff_devices staff_devices [not null]
+  templates templates [not null]
+  todos todos [not null]
+  transcripts transcripts [not null]
+  ui_conversations ui_conversations [not null]
+  ui_groups ui_groups [not null]
+  user_app_details user_app_details [not null]
+  user_locking_logs user_locking_logs [not null]
+  user_preferences user_preferences [not null]
+  user_settings user_settings [not null]
+  user_sms_credit_purchase_logs user_sms_credit_purchase_logs [not null]
+  user_socials user_socials [not null]
+  user_subaccounts_user_subaccounts_subaccount_idTousers user_subaccounts [not null]
+  user_subaccounts_user_subaccounts_user_idTousers user_subaccounts [not null]
+  webhook_logs webhook_logs [not null]
+  webinar webinar [not null]
+  whatsapp_cloud_api whatsapp_cloud_api [not null]
+  whatsapp_templates whatsapp_templates [not null]
+  workbooks workbooks [not null]
+  workspaceMemberships tm_workspace_members [not null]
+  createdWorkspaces tm_workspaces [not null]
+  updatedWorkspaces tm_workspaces [not null]
+  createdTasks tm_tasks [not null]
+  updatedTasks tm_tasks [not null]
+  taskComments tm_task_comments [not null]
+  taskHistory tm_task_history [not null]
+  createdTaskTemplates tm_task_templates [not null]
+  updatedTaskTemplates tm_task_templates [not null]
+  createdTaskGroups tm_task_groups [not null]
+  updatedTaskGroups tm_task_groups [not null]
+  createdIdeaBoards tm_idea_boards [not null]
+  updatedIdeaBoards tm_idea_boards [not null]
+  createdIdeas tm_ideas [not null]
+  updatedIdeas tm_ideas [not null]
+  ideaComments tm_idea_comments [not null]
+  createdLinks tm_links [not null]
+  updatedLinks tm_links [not null]
+  taskAssignments tm_task_assignments [not null]
+  taskLoops tm_task_loops [not null]
+  groupMemberships tm_group_memberships [not null]
+  boardAccess tm_board_access [not null]
+  reminderRecipients tm_reminder_recipients [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table utm_conversions {
+  id BigInt [pk, increment]
+  utm_visit_id BigInt [not null]
+  contact_id BigInt
+  user_id BigInt
+  conversion_type String [not null]
+  revenue Decimal
+  conversion_data Json
+  created_at DateTime
+  updated_at DateTime
+  utm_visits utm_visits [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table utm_visits {
+  id BigInt [pk, increment]
+  visitor_id String [not null]
+  session_id String [not null]
+  user_id BigInt
+  event_type String [not null, default: 'Page Visited']
+  source String
+  utm_id String
+  utm_source String
+  utm_medium String
+  utm_campaign String
+  utm_term String
+  utm_content String
+  referrer String
+  utl_link String
+  visited_page String
+  ip_address String
+  user_agent String
+  device_type String
+  browser String
+  os String
+  country String
+  city String
+  time_spent Int [not null, default: 0]
+  created_at DateTime
+  updated_at DateTime
+  utm_conversions utm_conversions [not null]
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table vat_taxes {
+  id BigInt [pk, increment]
+  vat_tax String [not null]
+  percentage Float [not null]
+  status String [not null, default: '1']
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table vendors {
+  id BigInt [pk, increment]
+  vendor_id String [not null]
+  enabled Boolean [not null, default: false]
+  cost Float [not null]
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table video_shopping_languages {
+  id BigInt [pk, increment]
+  video_shopping_id BigInt [not null]
+  lang String [not null]
+  title String
+  meta_title String
+  meta_description String
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table video_shoppings {
+  id BigInt [pk, increment]
+  slug String [not null]
+  user_id BigInt [not null, default: 1]
+  thumbnail_id BigInt
+  thumbnail String
+  style String [not null, default: 'style_1']
+  video_type String
+  video_url String
+  is_live Int [not null, default: 0]
+  status Int [not null, default: 1]
+  enable_related_product Int [not null, default: 1]
+  product_ids String
+  total_viewed BigInt [not null, default: 0]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table visitor_analytics {
+  id BigInt [pk, increment]
+  analyzable_type String [not null]
+  analyzable_id BigInt [not null]
+  shop_id BigInt [not null]
+  user_id BigInt [not null]
+  period String [not null]
+  total_visitors BigInt [not null, default: 0]
+  total_orders BigInt [not null, default: 0]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table voiceover_languages {
+  id BigInt [pk, increment]
+  language String [not null]
+  language_code String [unique, not null]
+  language_flag String
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table voiceover_results {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  language String [not null]
+  language_flag String
+  voice String [not null]
+  voice_id String
+  gender String
+  text String
+  text_raw String
+  file_name String
+  result_url String
+  result_ext String
+  storage String
+  title String
+  vendor String [not null]
+  vendor_id String
+  characters Int
+  voice_type String [not null]
+  plan_type String [not null]
+  audio_type String
+  mode String
+  project String
+  expires_at DateTime
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table voices {
+  id BigInt [pk, increment]
+  voice String [not null]
+  voice_id String [not null]
+  gender String [not null]
+  language_code String [not null]
+  vendor_id String [not null]
+  vendor String [not null]
+  vendor_img String [not null]
+  status String [not null, default: 'active']
+  avatar_url String
+  voice_type String [not null, default: 'standard']
+  sample_url String
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table wallets {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  order_id BigInt
+  amount Float
+  source String
+  type String
+  payment_method String
+  payment_details String
+  status String [not null, default: 'pending']
+  transaction_id String
+  image String
+  created_at DateTime
+  updated_at DateTime
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table webhook_logs {
+  id BigInt [pk, increment]
+  user_id BigInt
+  payload Json
+  level String [not null, default: 'info']
+  level_name String [not null, default: 'INFO']
+  channel String [not null, default: 'webhook']
+  status webhook_logs_status [not null, default: 'pending']
+  failed_reason String
+  last_fired_at DateTime
+  fire_count Int [not null, default: 1]
+  form_id String
+  lead_id String
+  created_at DateTime
+  updated_at DateTime
+  users users
+}
+
+Table webinar {
+  id BigInt [pk, increment]
+  zoom_webinar_id String [unique, not null]
+  uuid String
+  topic String
+  start_time DateTime
+  duration Int
+  timezone String
+  created_at DateTime
+  updated_at DateTime
+  user_id BigInt
+  users users
+}
+
+Table whats_app_message_logs {
+  id BigInt [pk, increment]
+  replied_to_whatsapp_message_logs_id BigInt
+  user_id BigInt [not null]
+  contact_id BigInt
+  wamid String
+  is_forwarded Boolean [default: false]
+  is_incoming_message Int [default: 1]
+  status String
+  messaged_at DateTime
+  message String
+  wa_phone_number_id String
+  data Json
+  created_at DateTime
+  updated_at DateTime
+  type String
+}
+
+Table whatsapp_cloud_api {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  facebook_app_id String
+  whatsapp_integration_access_token String
+  whatsapp_business_account_id String
+  whatsapp_from_phone_number String
+  whatsapp_from_phone_number_id String
+  whatsapp_webhook_url String
+  whatsapp_webhook_verify_token String
+  deleted_at DateTime
+  created_at DateTime
+  updated_at DateTime
+  webhook_verified_at DateTime
+  isWebhookVerified Boolean [not null, default: false]
+  response_data String
+  registered_at DateTime
+  users users [not null]
+}
+
+Table whatsapp_cloud_api_campaigns {
+  id BigInt [pk, increment]
+  campaign_name String [not null]
+  message_type Json
+  user_id BigInt [not null]
+  template_id BigInt
+  email_template_id BigInt
+  template_response String
+  schedule_date DateTime
+  schedule_time DateTime
+  created_at DateTime
+  updated_at DateTime
+  archived_at DateTime
+  status String [not null, default: 'scheduled']
+  old_status String
+  campaign_status String
+  last_sent_at DateTime
+  attributes Json
+  sms_template_id BigInt
+
+  Note: 'This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments'
+}
+
+Table whatsapp_templates {
+  id BigInt [pk, increment]
+  uid String [not null]
+  cloud_api_id BigInt
+  user_id BigInt [not null]
+  status String
+  template_name String
+  template_id String
+  category String
+  language String
+  data Json
+  created_at DateTime
+  updated_at DateTime
+  deleted_at DateTime
+  users users [not null]
+}
+
+Table wishlists {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  product_id BigInt [not null]
+  created_at DateTime
+  updated_at DateTime
+}
+
+Table workbooks {
+  id BigInt [pk, increment]
+  user_id BigInt [not null]
+  name String [not null]
+  default Boolean [default: false]
+  created_at DateTime
+  updated_at DateTime
+  users users [not null]
+}
+
+Table tm_workspaces {
+  id String [pk]
+  agency_id BigInt [not null]
+  name String [not null]
+  description String
+  color String
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [not null]
+  created_by BigInt [not null]
+  updated_by BigInt
+  agency agencies [not null]
+  creator users [not null]
+  updater users
+  members tm_workspace_members [not null]
+  categories tm_categories [not null]
+  tasks tm_tasks [not null]
+  taskGroups tm_task_groups [not null]
+  ideaBoards tm_idea_boards [not null]
+  links tm_links [not null]
+}
+
+Table tm_workspace_members {
+  workspace_id String [not null]
+  user_id BigInt [not null]
+  role WorkspaceRole [not null, default: 'member']
+  joined_at DateTime [default: `now()`, not null]
+  workspace tm_workspaces [not null]
+  user users [not null]
+
+  indexes {
+    (workspace_id, user_id) [pk]
+  }
+}
+
+Table tm_categories {
+  id String [pk]
+  workspace_id String [not null]
+  name String [not null]
+  description String
+  color String
+  icon String
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [not null]
+  workspace tm_workspaces [not null]
+  tasks tm_tasks [not null]
+  taskTemplates tm_task_templates [not null]
+  ideaBoards tm_idea_boards [not null]
+  links tm_links [not null]
+}
+
+Table tm_tasks {
+  id String [pk]
+  workspace_id String [not null]
+  title String [not null]
+  description String
+  status TaskManagementStatus [not null, default: 'TODO']
+  priority TaskManagementPriority [not null, default: 'MEDIUM']
+  dueDate DateTime
+  completedAt DateTime
+  category_id String
+  parent_task_id String
+  group_id String
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [not null]
+  created_by BigInt [not null]
+  updated_by BigInt
+  workspace tm_workspaces [not null]
+  category tm_categories
+  creator users [not null]
+  updater users
+  parentTask tm_tasks
+  subTasks tm_tasks [not null]
+  group tm_task_groups
+  repeat tm_task_repeats
+  reminders tm_task_reminders [not null]
+  checklist tm_checklist_items [not null]
+  comments tm_task_comments [not null]
+  history tm_task_history [not null]
+  assignments tm_task_assignments [not null]
+  loops tm_task_loops [not null]
+  attachments tm_task_attachments [not null]
+}
+
+Table tm_task_repeats {
+  id String [pk]
+  task_id String [unique]
+  interval RepeatInterval [not null]
+  startDate DateTime [not null]
+  endDate DateTime
+  dayOfMonth Int
+  skipWeekends Boolean [not null, default: false]
+  occurrenceCount Int
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [not null]
+  task tm_tasks
+  taskTemplates tm_task_templates [not null]
+  daysOfWeek tm_repeat_days_of_week [not null]
+}
+
+Table tm_repeat_days_of_week {
+  id String [pk]
+  repeat_id String [not null]
+  dayOfWeek Int [not null]
+  repeat tm_task_repeats [not null]
+}
+
+Table tm_task_reminders {
+  id String [pk]
+  task_id String [not null]
+  channel ReminderChannel [not null]
+  triggerType ReminderTriggerType [not null]
+  triggerAt DateTime [not null]
+  status ReminderStatus [not null, default: 'PENDING']
+  reminderMessage String
+  retryCount Int [not null, default: 0]
+  sentAt DateTime
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [not null]
+  task tm_tasks [not null]
+  recipients tm_reminder_recipients [not null]
+}
+
+Table tm_reminder_recipients {
+  reminder_id String [not null]
+  user_id BigInt [not null]
+  reminder tm_task_reminders [not null]
+  user users [not null]
+
+  indexes {
+    (reminder_id, user_id) [pk]
+  }
+}
+
+Table tm_task_attachments {
+  id String [pk]
+  task_id String [not null]
+  fileUrl String [not null]
+  fileName String [not null]
+  fileSize BigInt
+  mimeType String
+  created_at DateTime [default: `now()`, not null]
+  task tm_tasks [not null]
+}
+
+Table tm_task_assignments {
+  task_id String [not null]
+  user_id BigInt [not null]
+  task tm_tasks [not null]
+  user users [not null]
+
+  indexes {
+    (task_id, user_id) [pk]
+  }
+}
+
+Table tm_task_loops {
+  task_id String [not null]
+  user_id BigInt [not null]
+  task tm_tasks [not null]
+  user users [not null]
+
+  indexes {
+    (task_id, user_id) [pk]
+  }
+}
+
+Table tm_checklist_items {
+  id String [pk]
+  task_id String [not null]
+  title String [not null]
+  isCompleted Boolean [not null, default: false]
+  order Int [not null, default: 0]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [not null]
+  task tm_tasks [not null]
+}
+
+Table tm_task_comments {
+  id String [pk]
+  task_id String [not null]
+  user_id BigInt [not null]
+  content String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [not null]
+  task tm_tasks [not null]
+  user users [not null]
+}
+
+Table tm_task_history {
+  id String [pk]
+  task_id String [not null]
+  user_id BigInt [not null]
+  action String [not null]
+  field String
+  oldValue String
+  newValue String
+  created_at DateTime [default: `now()`, not null]
+  task tm_tasks [not null]
+  user users [not null]
+}
+
+Table tm_task_templates {
+  id String [pk]
+  title String [not null]
+  description String
+  status TaskManagementStatus [not null, default: 'TODO']
+  priority TaskManagementPriority [not null, default: 'MEDIUM']
+  category_id String
+  repeat_id String
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [not null]
+  created_by BigInt [not null]
+  updated_by BigInt
+  category tm_categories
+  repeat tm_task_repeats
+  creator users [not null]
+  updater users
+  checklistItems tm_template_checklist_items [not null]
+  attachments tm_template_attachments [not null]
+}
+
+Table tm_template_checklist_items {
+  id String [pk]
+  template_id String [not null]
+  title String [not null]
+  order Int [not null, default: 0]
+  template tm_task_templates [not null]
+}
+
+Table tm_template_attachments {
+  id String [pk]
+  template_id String [not null]
+  fileUrl String [not null]
+  fileName String [not null]
+  template tm_task_templates [not null]
+}
+
+Table tm_task_groups {
+  id String [pk]
+  workspace_id String [not null]
+  title String [not null]
+  description String
+  status TaskGroupStatus [not null, default: 'ACTIVE']
+  type TaskGroupType [not null, default: 'PUBLIC']
+  groupImage String
+  color String
+  icon String
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [not null]
+  created_by BigInt [not null]
+  updated_by BigInt
+  workspace tm_workspaces [not null]
+  creator users [not null]
+  updater users
+  tasks tm_tasks [not null]
+  members tm_group_memberships [not null]
+}
+
+Table tm_group_memberships {
+  group_id String [not null]
+  user_id BigInt [not null]
+  group tm_task_groups [not null]
+  user users [not null]
+
+  indexes {
+    (group_id, user_id) [pk]
+  }
+}
+
+Table tm_idea_boards {
+  id String [pk]
+  workspace_id String [not null]
+  title String [not null]
+  description String
+  coverImage String
+  status String [not null, default: 'active']
+  isPublic Boolean [not null, default: false]
+  category_id String
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [not null]
+  created_by BigInt [not null]
+  updated_by BigInt
+  workspace tm_workspaces [not null]
+  category tm_categories
+  creator users [not null]
+  updater users
+  ideas tm_ideas [not null]
+  accessMembers tm_board_access [not null]
+  tags tm_board_tags [not null]
+}
+
+Table tm_board_access {
+  board_id String [not null]
+  user_id BigInt [not null]
+  board tm_idea_boards [not null]
+  user users [not null]
+
+  indexes {
+    (board_id, user_id) [pk]
+  }
+}
+
+Table tm_board_tags {
+  id String [pk]
+  board_id String [not null]
+  tag String [not null]
+  board tm_idea_boards [not null]
+}
+
+Table tm_ideas {
+  id String [pk]
+  title String [not null]
+  description String
+  board_id String [not null]
+  status IdeaStatus [not null, default: 'DRAFT']
+  upvotes Int [not null, default: 0]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [not null]
+  created_by BigInt [not null]
+  updated_by BigInt
+  board tm_idea_boards [not null]
+  creator users [not null]
+  updater users
+  comments tm_idea_comments [not null]
+  attachments tm_idea_attachments [not null]
+  tags tm_idea_tags [not null]
+}
+
+Table tm_idea_attachments {
+  id String [pk]
+  idea_id String [not null]
+  fileUrl String [not null]
+  fileName String [not null]
+  fileSize BigInt
+  mimeType String
+  created_at DateTime [default: `now()`, not null]
+  idea tm_ideas [not null]
+}
+
+Table tm_idea_tags {
+  id String [pk]
+  idea_id String [not null]
+  tag String [not null]
+  idea tm_ideas [not null]
+}
+
+Table tm_idea_comments {
+  id String [pk]
+  idea_id String [not null]
+  user_id BigInt [not null]
+  content String [not null]
+  parent_id String
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [not null]
+  idea tm_ideas [not null]
+  user users [not null]
+  parent tm_idea_comments
+  replies tm_idea_comments [not null]
+}
+
+Table tm_links {
+  id String [pk]
+  workspace_id String [not null]
+  title String [not null]
+  description String
+  url String [not null]
+  category_id String
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [not null]
+  created_by BigInt [not null]
+  updated_by BigInt
+  workspace tm_workspaces [not null]
+  category tm_categories
+  creator users [not null]
+  updater users
+}
+
+Enum WorkspaceRole {
+  owner
+  admin
+  member
+}
+
+Enum TaskManagementStatus {
+  TODO
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+Enum TaskManagementPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+Enum RepeatInterval {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+Enum ReminderChannel {
+  WHATSAPP
+  EMAIL
+  PUSH_NOTIFICATION
+  SMS
+}
+
+Enum ReminderTriggerType {
+  BEFORE
+  AFTER
+}
+
+Enum ReminderStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+Enum TaskGroupStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+Enum TaskGroupType {
+  PRIVATE
+  PUBLIC
+}
+
+Enum IdeaStatus {
+  DRAFT
+  ACTIVE
+  UNDER_REVIEW
+  APPROVED
+  IMPLEMENTED
+  REJECTED
+  ARCHIVED
+}
+
+Enum stats_name {
+  browser
+  platform
+  device
+  clicks
+  country
+  city
+  referrer
+  language
+  clicks_hours
+}
+
+Enum agency_credit_costs_plan_type {
+  Silver_Seller
+  Gold_Seller
+  Diamond_Seller
+}
+
+Enum pixels_type {
+  adroll
+  google_ads
+  bing
+  facebook
+  google_analytics
+  google_tag_manager
+  linkedin
+  pinterest
+  quora
+  twitter
+}
+
+Enum pma__usergroups_allowed {
+  Y
+  N
+}
+
+Enum ui_messages_channel {
+  email
+  whatsapp_sender
+  whatsapp_cloud
+  sms
+  instagram
+  live_chat
+}
+
+Enum community_group_members_role {
+  admin
+  moderator
+  member
+}
+
+Enum ingestion_events_stage {
+  created
+  fetched
+  extracted
+  summarized
+  chunked
+  embedded
+  indexed
+  deleted
+}
+
+Enum knowledge_items_visibility {
+  public
+  private
+}
+
+Enum seller_staffs_type {
+  human
+  ai
+}
+
+Enum ui_group_participants_role {
+  admin
+  member
+}
+
+Enum ui_message_receipts_status {
+  sent
+  delivered
+  read
+  failed
+  bounced
+  opened
+  clicked
+  skipped
+  opt_out
+}
+
+Enum ui_messages_type {
+  text
+  image
+  video
+  document
+}
+
+Enum announcement_banner_analytics_event_type {
+  impression
+  click
+  dismiss
+}
+
+Enum announcement_banners_type {
+  text
+  html
+  image
+}
+
+Enum community_chat_inboxes_type {
+  group
+  personal
+}
+
+Enum community_group_members_activity_type {
+  added
+  removed
+  left
+  joined
+}
+
+Enum announcement_banners_style {
+  popup
+  card
+  notification
+  bar
+  toast
+}
+
+Enum funnel_tracking_events_level {
+  funnel
+  pages
+}
+
+Enum packages_type {
+  regular
+  add_on
+  credit
+}
+
+Enum announcement_banners_animation {
+  slide_top
+  slide_bottom
+  slide_left
+  slide_right
+  bounce
+  fade
+  pulse
+  none
+}
+
+Enum campaign_audience_whatsapp_status {
+  sent
+  failed
+}
+
+Enum community_groups_type {
+  public
+  private
+  secret
+}
+
+Enum community_post_reports_status {
+  pending
+  reviewed
+}
+
+Enum ui_conversations_last_message_channel {
+  email
+  whatsapp_sender
+  whatsapp_cloud
+  sms
+  instagram
+  live_chat
+}
+
+Enum webhook_logs_status {
+  pending
+  processed
+  failed
+}
+
+Enum campaign_audience_email_status {
+  sent
+  failed
+}
+
+Enum seller_payouts_status {
+  pending
+  accepted
+  rejected
+  canceled
+  processed
+}
+
+Enum sms_template_service_type {
+  TRANS
+  PROMO
+}
+
+Enum users_user_type {
+  admin
+  staff
+  seller
+  customer
+  delivery_hero
+  walk_in
+  seller_and_customer
+  seller_staff
+  sub_admin
+  affiliate
+}
+
+Enum community_posts_approval_status {
+  pending
+  approved
+  rejected
+}
+
+Enum packages_discount_type {
+  fixed
+  percentage
+}
+
+Enum funnel_prebuilds_visibility {
+  global
+  agency
+}
+
+Enum ui_conversations_sent_type {
+  automatic
+  manual
+}
+
+Enum agency_plans_plan_type {
+  Silver_Seller
+  Gold_Seller
+  Premium_Gold_Seller
+  Diamond_Seller
+  Premium_Diamond_Seller
+}
+
+Enum community_groups_default_role {
+  admin
+  moderator
+  member
+}
+
+Enum community_groups_status {
+  active
+  inactive
+  archived
+}
+
+Enum products_stock_visibility {
+  hide_stock
+  visible_with_quantity
+  visible_with_text
+}
+
+Enum products_status {
+  unpublished
+  published
+  trash
+}
+
+Ref: admin_chat_support.user_id > users.id [delete: Cascade]
+
+Ref: affiliate_clicks.affiliate_id > affiliates.id [delete: Cascade]
+
+Ref: affiliate_clicks.package_id > packages.id [delete: Cascade]
+
+Ref: agency_affiliate_settings.agency_id > agencies.id [delete: Cascade]
+
+Ref: agency_affiliate_settings.user_id > users.id [delete: Cascade]
+
+Ref: agency_cancellations.user_id > users.id [delete: Cascade]
+
+Ref: agency_plans.snapshot_id > snapshots.id [delete: No Action]
+
+Ref: announcement_banner_analytics.banner_id > announcement_banners.id [delete: Cascade]
+
+Ref: announcement_banner_analytics.user_id > users.id
+
+Ref: announcement_banner_dismissals.banner_id > announcement_banners.id [delete: Cascade]
+
+Ref: announcement_banner_dismissals.user_id > users.id [delete: Cascade]
+
+Ref: app_store.user_id > users.id [delete: Cascade]
+
+Ref: automation2_versions.automation2_id > automation2s.id [delete: Cascade]
+
+Ref: automation_overdue_configs.automation_id > automation2s.id [delete: Cascade]
+
+Ref: bulk_operation_entries.batch_id > batches.id [delete: Cascade]
+
+Ref: bulk_operation_entries.bulk_operation_id > bulk_operations.id [delete: Cascade]
+
+Ref: bulk_operations.server_side_event_id > server_side_events.id [delete: Cascade]
+
+Ref: bulk_operations.user_id > users.id [delete: Cascade]
+
+Ref: chat_widgets.assigned_user_id > users.id
+
+Ref: chat_widgets.user_id > users.id
+
+Ref: community_announcements.community_owner_id > users.id [delete: Cascade]
+
+Ref: community_channel_criteria.channel_id > community_channels.id [delete: Cascade]
+
+Ref: community_channels.community_owner_id > users.id [delete: Cascade]
+
+Ref: community_chat_inboxes.sender_id > contacts.id [delete: No Action]
+
+Ref: community_custom_links.community_owner_id > users.id [delete: Cascade]
+
+Ref: community_follows.community_owner_id > users.id [delete: Cascade]
+
+Ref: community_follows.follower_id > contacts.id [delete: Cascade]
+
+Ref: community_follows.following_id > contacts.id [delete: Cascade]
+
+Ref: community_group_members.activity_by > contacts.id [delete: No Action]
+
+Ref: community_group_members.group_id > community_groups.uuid [delete: Cascade]
+
+Ref: community_group_members.member_id > contacts.id [delete: No Action]
+
+Ref: community_group_members.removed_by > contacts.id [delete: No Action]
+
+Ref: community_groups.community_owner_id > users.id [delete: No Action]
+
+Ref: community_groups.created_by > contacts.id [delete: No Action]
+
+Ref: community_groups.owner_id > contacts.id [delete: No Action]
+
+Ref: community_post_reports.post_id > community_posts.id [delete: Cascade]
+
+Ref: community_post_reports.reporter_id > contacts.id [delete: Cascade]
+
+Ref: contact_documents.contact_id > contacts.id [delete: Cascade]
+
+Ref: contact_documents.user_id > users.id [delete: Cascade]
+
+Ref: contact_tag.note_id > notes.id [delete: Cascade]
+
+Ref: crm_quick_filters.user_id > users.id [delete: Cascade]
+
+Ref: custom_menu_users.custom_menu_id > custom_menus.id [delete: Cascade]
+
+Ref: custom_menu_users.user_id > users.id [delete: Cascade]
+
+Ref: custom_menus.agency_id > agencies.id [delete: Cascade]
+
+Ref: email_server_configs.agency_id > agencies.id [delete: Cascade]
+
+Ref: email_server_configs.user_id > users.id [delete: Cascade]
+
+Ref: event_type_locations.staff_id > users.id [delete: Cascade]
+
+Ref: event_type_staff_details.event_type_id > event_types.id [delete: Cascade]
+
+Ref: event_type_staff_details.staff_id > users.id [delete: Cascade]
+
+Ref: events.staff_id > users.id [delete: Cascade]
+
+Ref: folderables.folder_id > folders.id [delete: Cascade]
+
+Ref: folders.parent_id - folders.id [delete: Cascade]
+
+Ref: folders.user_id > users.id [delete: Cascade]
+
+Ref: funnel_folders.user_id > users.id [delete: Cascade]
+
+Ref: funnel_prebuilds.automation_id > automation2s.id [delete: Cascade]
+
+Ref: funnel_prebuilds.email_template_id > acelle_templates.id [delete: Cascade]
+
+Ref: funnel_prebuilds.pipeline_id > pipelines.id [delete: Cascade]
+
+Ref: funnel_prebuilds.whatsapp_template_id > templates.id [delete: Cascade]
+
+Ref: ingestion_events.item_id > knowledge_items.id [delete: Cascade]
+
+Ref: ingestion_events.user_id > users.id [delete: Cascade]
+
+Ref: instagram_webhook_logs.user_id > users.id
+
+Ref: integrations.user_id > users.id [delete: Cascade]
+
+Ref: ivr_form.custom_field_id > custom_fields.id
+
+Ref: knowledge_items.user_id > users.id [delete: Cascade]
+
+Ref: landing_page_funnels.folder_id > funnel_folders.id
+
+Ref: landing_page_versions.landing_page_id > landing_pages.id [delete: Cascade]
+
+Ref: landing_page_versions.user_id > users.id [delete: Cascade]
+
+Ref: llm_models.llm_provider_id > llm_providers.id [delete: Cascade]
+
+Ref: llm_providers.user_id > users.id [delete: Cascade]
+
+Ref: media_conversion_logs.media_id > media.id [delete: Cascade]
+
+Ref: module_items.module_id > modules.id [delete: Cascade]
+
+Ref: module_items.snapshot_id > snapshots.id [delete: Cascade]
+
+Ref: pr_assignees.task_id > pr_tasks.id [delete: Cascade]
+
+Ref: pr_assignees.user_id > users.id [delete: Cascade]
+
+Ref: pr_backgrounds.user_id > users.id [delete: Cascade]
+
+Ref: pr_board_lists.project_id > pr_projects.id [delete: Cascade]
+
+Ref: pr_board_lists.user_id > users.id
+
+Ref: pr_check_lists.task_id > pr_tasks.id [delete: Cascade]
+
+Ref: pr_comments.task_id > pr_tasks.id [delete: Cascade]
+
+Ref: pr_comments.user_id > users.id [delete: Cascade]
+
+Ref: pr_labels.user_id > users.id [delete: Cascade]
+
+Ref: pr_projects.user_id > users.id [delete: Cascade]
+
+Ref: pr_projects.workspace_id > pr_workspaces.id [delete: Cascade]
+
+Ref: pr_recent_projects.project_id > pr_projects.id [delete: Cascade]
+
+Ref: pr_recent_projects.user_id > users.id [delete: Cascade]
+
+Ref: pr_settings.user_id > users.id [delete: Cascade]
+
+Ref: pr_starred_projects.project_id > pr_projects.id [delete: Cascade]
+
+Ref: pr_starred_projects.user_id > users.id [delete: Cascade]
+
+Ref: pr_task_labels.label_id > pr_labels.id [delete: Cascade]
+
+Ref: pr_task_labels.task_id > pr_tasks.id [delete: Cascade]
+
+Ref: pr_tasks.list_id > pr_board_lists.id [delete: Cascade]
+
+Ref: pr_tasks.project_id > pr_projects.id [delete: Cascade]
+
+Ref: pr_tasks.user_id > users.id [delete: Cascade]
+
+Ref: pr_team_members.added_by > users.id
+
+Ref: pr_team_members.user_id > users.id
+
+Ref: pr_team_members.workspace_id > pr_workspaces.id [delete: Cascade]
+
+Ref: pr_timers.task_id > pr_tasks.id [delete: Cascade]
+
+Ref: pr_timers.user_id > users.id [delete: Cascade]
+
+Ref: pr_workspace_types.user_id > users.id [delete: Cascade]
+
+Ref: pr_workspaces.type_id > pr_workspace_types.id
+
+Ref: pr_workspaces.user_id > users.id [delete: Cascade]
+
+Ref: replicate_histories.snapshot_id > snapshots.id [delete: Cascade]
+
+Ref: replicate_histories.user_id > users.id [delete: Cascade]
+
+Ref: seller_ai_staff_permissions.staff_id > seller_staffs.id [delete: Cascade]
+
+Ref: seller_ai_staff_permissions.user_id > users.id [delete: Cascade]
+
+Ref: server_side_events.user_id > users.id [delete: Cascade]
+
+Ref: snapshot_subaccounts.snapshot_id > snapshots.id [delete: Cascade]
+
+Ref: staff_devices.device_id > devices.id [delete: Cascade]
+
+Ref: staff_devices.staff_id > users.id [delete: Cascade]
+
+Ref: templates.user_id > users.id [delete: Cascade]
+
+Ref: todos.user_id > users.id [delete: Cascade]
+
+Ref: tracking_logs.auto_trigger_id > auto_triggers.id [delete: Cascade]
+
+Ref: transcripts.user_id > users.id [delete: Cascade]
+
+Ref: ui_conversations.contact_id > contacts.id [delete: Cascade]
+
+Ref: ui_conversations.user_id > users.id [delete: Cascade]
+
+Ref: ui_group_participants.contact_id > contacts.id [delete: Cascade]
+
+Ref: ui_group_participants.group_id > ui_groups.id [delete: Cascade]
+
+Ref: ui_groups.creator_id > users.id [delete: Cascade]
+
+Ref: user_app_details.user_id > users.id [delete: Cascade]
+
+Ref: user_locking_logs.user_id > users.id [delete: Cascade]
+
+Ref: user_preferences.user_id > users.id [delete: Cascade]
+
+Ref: user_settings.user_id > users.id [delete: Cascade]
+
+Ref: user_sms_credit_purchase_logs.user_id > users.id [delete: Cascade]
+
+Ref: user_socials.user_id > users.id [delete: Cascade]
+
+Ref: user_subaccounts.subaccount_id > users.id [delete: Cascade]
+
+Ref: user_subaccounts.user_id > users.id [delete: Cascade]
+
+Ref: utm_conversions.utm_visit_id > utm_visits.id [delete: Cascade]
+
+Ref: webhook_logs.user_id > users.id [delete: Cascade]
+
+Ref: webinar.user_id > users.id
+
+Ref: whatsapp_cloud_api.user_id > users.id [delete: Cascade]
+
+Ref: whatsapp_templates.user_id > users.id [delete: Cascade]
+
+Ref: workbooks.user_id > users.id [delete: Cascade]
+
+Ref: tm_workspaces.agency_id > agencies.id [delete: Cascade]
+
+Ref: tm_workspaces.created_by > users.id
+
+Ref: tm_workspaces.updated_by > users.id
+
+Ref: tm_workspace_members.workspace_id > tm_workspaces.id [delete: Cascade]
+
+Ref: tm_workspace_members.user_id > users.id [delete: Cascade]
+
+Ref: tm_categories.workspace_id > tm_workspaces.id [delete: Cascade]
+
+Ref: tm_tasks.workspace_id > tm_workspaces.id [delete: Cascade]
+
+Ref: tm_tasks.category_id > tm_categories.id [delete: Set Null]
+
+Ref: tm_tasks.created_by > users.id
+
+Ref: tm_tasks.updated_by > users.id
+
+Ref: tm_tasks.parent_task_id - tm_tasks.id [delete: No Action]
+
+Ref: tm_tasks.group_id > tm_task_groups.id [delete: Set Null]
+
+Ref: tm_task_repeats.task_id - tm_tasks.id [delete: Cascade]
+
+Ref: tm_repeat_days_of_week.repeat_id > tm_task_repeats.id [delete: Cascade]
+
+Ref: tm_task_reminders.task_id > tm_tasks.id [delete: Cascade]
+
+Ref: tm_reminder_recipients.reminder_id > tm_task_reminders.id [delete: Cascade]
+
+Ref: tm_reminder_recipients.user_id > users.id [delete: Cascade]
+
+Ref: tm_task_attachments.task_id > tm_tasks.id [delete: Cascade]
+
+Ref: tm_task_assignments.task_id > tm_tasks.id [delete: Cascade]
+
+Ref: tm_task_assignments.user_id > users.id [delete: Cascade]
+
+Ref: tm_task_loops.task_id > tm_tasks.id [delete: Cascade]
+
+Ref: tm_task_loops.user_id > users.id [delete: Cascade]
+
+Ref: tm_checklist_items.task_id > tm_tasks.id [delete: Cascade]
+
+Ref: tm_task_comments.task_id > tm_tasks.id [delete: Cascade]
+
+Ref: tm_task_comments.user_id > users.id [delete: Cascade]
+
+Ref: tm_task_history.task_id > tm_tasks.id [delete: Cascade]
+
+Ref: tm_task_history.user_id > users.id
+
+Ref: tm_task_templates.category_id > tm_categories.id [delete: Set Null]
+
+Ref: tm_task_templates.repeat_id > tm_task_repeats.id [delete: Set Null]
+
+Ref: tm_task_templates.created_by > users.id
+
+Ref: tm_task_templates.updated_by > users.id
+
+Ref: tm_template_checklist_items.template_id > tm_task_templates.id [delete: Cascade]
+
+Ref: tm_template_attachments.template_id > tm_task_templates.id [delete: Cascade]
+
+Ref: tm_task_groups.workspace_id > tm_workspaces.id [delete: Cascade]
+
+Ref: tm_task_groups.created_by > users.id
+
+Ref: tm_task_groups.updated_by > users.id
+
+Ref: tm_group_memberships.group_id > tm_task_groups.id [delete: Cascade]
+
+Ref: tm_group_memberships.user_id > users.id [delete: Cascade]
+
+Ref: tm_idea_boards.workspace_id > tm_workspaces.id [delete: Cascade]
+
+Ref: tm_idea_boards.category_id > tm_categories.id [delete: Set Null]
+
+Ref: tm_idea_boards.created_by > users.id
+
+Ref: tm_idea_boards.updated_by > users.id
+
+Ref: tm_board_access.board_id > tm_idea_boards.id [delete: Cascade]
+
+Ref: tm_board_access.user_id > users.id [delete: Cascade]
+
+Ref: tm_board_tags.board_id > tm_idea_boards.id [delete: Cascade]
+
+Ref: tm_ideas.board_id > tm_idea_boards.id [delete: Cascade]
+
+Ref: tm_ideas.created_by > users.id
+
+Ref: tm_ideas.updated_by > users.id
+
+Ref: tm_idea_attachments.idea_id > tm_ideas.id [delete: Cascade]
+
+Ref: tm_idea_tags.idea_id > tm_ideas.id [delete: Cascade]
+
+Ref: tm_idea_comments.idea_id > tm_ideas.id [delete: Cascade]
+
+Ref: tm_idea_comments.user_id > users.id [delete: Cascade]
+
+Ref: tm_idea_comments.parent_id - tm_idea_comments.id [delete: No Action]
+
+Ref: tm_links.workspace_id > tm_workspaces.id [delete: Cascade]
+
+Ref: tm_links.category_id > tm_categories.id [delete: Set Null]
+
+Ref: tm_links.created_by > users.id
+
+Ref: tm_links.updated_by > users.id

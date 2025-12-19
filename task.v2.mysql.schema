@@ -1,0 +1,605 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum ReminderChannel {
+  WHATSAPP
+  EMAIL
+  PUSH_NOTIFICATION
+  SMS
+}
+
+enum ReminderTriggerType {
+  BEFORE
+  AFTER
+}
+
+enum ReminderStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+enum RepeatInterval {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum GroupStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+enum GroupType {
+  PRIVATE
+  PUBLIC
+}
+
+enum IdeaStatus {
+  DRAFT
+  ACTIVE
+  UNDER_REVIEW
+  APPROVED
+  IMPLEMENTED
+  REJECTED
+  ARCHIVED
+}
+
+// Models
+model Workspace {
+  id          String   @id @default(uuid())
+  name        String
+  description String?  @db.Text
+  color       String?
+  
+  createdBy   String   @map("created_by")
+  updatedBy   String?  @map("updated_by")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  members       WorkspaceMember[]
+  categories    Category[]
+  tasks         Task[]
+  taskGroups    TaskGroup[]
+  ideaBoards    IdeaBoard[]
+
+  @@index([createdBy])
+  @@map("workspaces")
+}
+
+// Workspace members join table
+model WorkspaceMember {
+  workspaceId String   @map("workspace_id")
+  userId      String   @map("user_id")
+  role        String?  @default("member") // e.g., "owner", "admin", "member"
+  joinedAt    DateTime @default(now()) @map("joined_at")
+  
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([workspaceId, userId])
+  @@index([userId])
+  @@map("workspace_members")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  phone     String?
+  avatar    String?
+  role      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  workspaces         WorkspaceMember[]
+  createdTasks       Task[]              @relation("TaskCreator")
+  taskComments       TaskComment[]
+  taskHistory        TaskHistory[]
+  createdTaskGroups  TaskGroup[]         @relation("TaskGroupCreator")
+  createdIdeaBoards  IdeaBoard[]         @relation("IdeaBoardCreator")
+  createdIdeas       Idea[]              @relation("IdeaCreator")
+  ideaComments       IdeaComment[]
+  
+  // Many-to-many through join tables
+  taskAssignments    TaskAssignment[]
+  taskLoops          TaskLoop[]
+  groupMemberships   GroupMembership[]
+  boardAccess        BoardAccess[]
+  reminderRecipients ReminderRecipient[]
+
+  @@map("users")
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String
+  color       String?
+  icon        String?
+  workspaceId String   @map("workspace_id")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  workspace     Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  tasks         Task[]
+  taskTemplates TaskTemplate[]
+  ideaBoards    IdeaBoard[]
+
+  @@index([workspaceId])
+  @@map("categories")
+}
+
+model Task {
+  id          String     @id @default(uuid())
+  title       String
+  description String?    @db.Text
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(MEDIUM)
+  dueDate     DateTime?  @map("due_date")
+  completedAt DateTime?  @map("completed_at")
+
+  // Foreign Keys
+  workspaceId  String   @map("workspace_id")
+  categoryId   String?  @map("category_id")
+  createdBy    String   @map("created_by")
+  parentTaskId String?  @map("parent_task_id")
+  groupId      String?  @map("group_id")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  workspace     Workspace          @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  category      Category?          @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  creator       User               @relation("TaskCreator", fields: [createdBy], references: [id])
+  parentTask    Task?              @relation("SubTasks", fields: [parentTaskId], references: [id], onDelete: Cascade)
+  subTasks      Task[]             @relation("SubTasks")
+  group         TaskGroup?         @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  
+  repeat        TaskRepeat?
+  reminders     TaskReminder[]
+  checklist     ChecklistItem[]
+  comments      TaskComment[]
+  history       TaskHistory[]
+  
+  // Many-to-many through join tables
+  assignments   TaskAssignment[]
+  loops         TaskLoop[]
+  attachments   TaskAttachment[]
+
+  @@index([workspaceId])
+  @@index([status])
+  @@index([dueDate])
+  @@index([categoryId])
+  @@index([createdBy])
+  @@index([groupId])
+  @@map("tasks")
+}
+
+// Join table for task assignments
+model TaskAssignment {
+  taskId String @map("task_id")
+  userId String @map("user_id")
+  
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([taskId, userId])
+  @@index([userId])
+  @@map("task_assignments")
+}
+
+// Join table for task loops (in-loop members)
+model TaskLoop {
+  taskId String @map("task_id")
+  userId String @map("user_id")
+  
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([taskId, userId])
+  @@index([userId])
+  @@map("task_loops")
+}
+
+// Task attachments as separate table
+model TaskAttachment {
+  id       String @id @default(uuid())
+  taskId   String @map("task_id")
+  fileUrl  String @map("file_url")
+  fileName String @map("file_name")
+  fileSize Int?   @map("file_size")
+  mimeType String? @map("mime_type")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@map("task_attachments")
+}
+
+model TaskRepeat {
+  id            String         @id @default(uuid())
+  taskId        String?        @unique @map("task_id")
+  interval      RepeatInterval
+  startDate     DateTime       @map("start_date")
+  endDate       DateTime?      @map("end_date")
+  
+  // Advanced repeat options
+  dayOfMonth      Int?     @map("day_of_month")
+  skipWeekends    Boolean  @default(false) @map("skip_weekends")
+  occurrenceCount Int?     @map("occurrence_count")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  task           Task?               @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskTemplates  TaskTemplate[]
+  daysOfWeek     RepeatDayOfWeek[]
+
+  @@map("task_repeats")
+}
+
+// Days of week for repeat
+model RepeatDayOfWeek {
+  id       String @id @default(uuid())
+  repeatId String @map("repeat_id")
+  dayOfWeek Int   @map("day_of_week") // 0-6
+  
+  repeat TaskRepeat @relation(fields: [repeatId], references: [id], onDelete: Cascade)
+
+  @@unique([repeatId, dayOfWeek])
+  @@index([repeatId])
+  @@map("repeat_days_of_week")
+}
+
+model TaskReminder {
+  id              String              @id @default(uuid())
+  taskId          String              @map("task_id")
+  channel         ReminderChannel
+  triggerType     ReminderTriggerType @map("trigger_type")
+  triggerAt       DateTime            @map("trigger_at")
+  status          ReminderStatus      @default(PENDING)
+  reminderMessage String?             @map("reminder_message") @db.Text
+  
+  retryCount      Int        @default(0) @map("retry_count")
+  sentAt          DateTime?  @map("sent_at")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  task       Task                 @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  recipients ReminderRecipient[]
+
+  @@index([taskId])
+  @@index([triggerAt])
+  @@index([status])
+  @@map("task_reminders")
+}
+
+// Reminder recipients as join table
+model ReminderRecipient {
+  reminderId String @map("reminder_id")
+  userId     String @map("user_id")
+  
+  reminder TaskReminder @relation(fields: [reminderId], references: [id], onDelete: Cascade)
+  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([reminderId, userId])
+  @@index([userId])
+  @@map("reminder_recipients")
+}
+
+model ChecklistItem {
+  id          String   @id @default(uuid())
+  taskId      String   @map("task_id")
+  title       String
+  isCompleted Boolean  @default(false) @map("is_completed")
+  order       Int      @default(0)
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@map("checklist_items")
+}
+
+model TaskComment {
+  id        String   @id @default(uuid())
+  taskId    String   @map("task_id")
+  userId    String   @map("user_id")
+  content   String   @db.Text
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([taskId])
+  @@index([userId])
+  @@map("task_comments")
+}
+
+model TaskHistory {
+  id        String   @id @default(uuid())
+  taskId    String   @map("task_id")
+  userId    String   @map("user_id")
+  action    String
+  field     String?
+  oldValue  String?  @map("old_value") @db.Text
+  newValue  String?  @map("new_value") @db.Text
+  
+  createdAt DateTime @default(now()) @map("created_at")
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([taskId])
+  @@index([userId])
+  @@map("task_history")
+}
+
+model TaskTemplate {
+  id          String     @id @default(uuid())
+  title       String
+  description String?    @db.Text
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(MEDIUM)
+  
+  categoryId  String?    @map("category_id")
+  repeatId    String?    @map("repeat_id")
+  
+  createdBy  String   @map("created_by_id")
+  updatedBy  String   @map("updated_by_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  category            Category?              @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  repeat              TaskRepeat?            @relation(fields: [repeatId], references: [id], onDelete: SetNull)
+  checklistItems      TemplateChecklistItem[]
+  attachments         TemplateAttachment[]
+
+  @@index([categoryId])
+  @@index([repeatId])
+  @@map("task_templates")
+}
+
+// Template checklist items
+model TemplateChecklistItem {
+  id         String @id @default(uuid())
+  templateId String @map("template_id")
+  title      String
+  order      Int    @default(0)
+  
+  template TaskTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@index([templateId])
+  @@map("template_checklist_items")
+}
+
+// Template attachments
+model TemplateAttachment {
+  id         String @id @default(uuid())
+  templateId String @map("template_id")
+  fileUrl    String @map("file_url")
+  fileName   String @map("file_name")
+  
+  template TaskTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@index([templateId])
+  @@map("template_attachments")
+}
+
+model TaskGroup {
+  id          String      @id @default(uuid())
+  title       String
+  description String?     @db.Text
+  status      GroupStatus @default(ACTIVE)
+  type        GroupType   @default(PRIVATE)
+  groupImage  String?     @map("group_image")
+  color       String?
+  icon        String?
+  
+  workspaceId String      @map("workspace_id")
+  createdBy   String      @map("created_by")
+  updatedBy   String?     @map("updated_by")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  workspace   Workspace         @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  creator     User              @relation("TaskGroupCreator", fields: [createdBy], references: [id])
+  tasks       Task[]
+  members     GroupMembership[]
+
+  @@index([workspaceId])
+  @@index([status])
+  @@index([type])
+  @@index([createdBy])
+  @@map("task_groups")
+}
+
+// Group members join table
+model GroupMembership {
+  groupId String @map("group_id")
+  userId  String @map("user_id")
+  
+  group TaskGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([groupId, userId])
+  @@index([userId])
+  @@map("group_memberships")
+}
+
+model IdeaBoard {
+  id              String   @id @default(uuid())
+  title           String
+  description     String?  @db.Text
+  coverImage      String?  @map("cover_image")
+  status          String   @default("active")
+  isPublic        Boolean  @default(false) @map("is_public")
+  
+  workspaceId     String   @map("workspace_id")
+  categoryId      String?  @map("category_id")
+  
+  createdBy       String   @map("created_by")
+  updatedBy       String?  @map("updated_by")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  workspace       Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  category        Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  creator         User          @relation("IdeaBoardCreator", fields: [createdBy], references: [id])
+  ideas           Idea[]
+  accessMembers   BoardAccess[]
+  tags            BoardTag[]
+
+  @@index([workspaceId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([createdBy])
+  @@map("idea_boards")
+}
+
+// Board access control join table
+model BoardAccess {
+  boardId String @map("board_id")
+  userId  String @map("user_id")
+  
+  board IdeaBoard @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  user  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([boardId, userId])
+  @@index([userId])
+  @@map("board_access")
+}
+
+// Board tags
+model BoardTag {
+  id      String @id @default(uuid())
+  boardId String @map("board_id")
+  tag     String
+  
+  board IdeaBoard @relation(fields: [boardId], references: [id], onDelete: Cascade)
+
+  @@unique([boardId, tag])
+  @@index([boardId])
+  @@map("board_tags")
+}
+
+model Idea {
+  id          String     @id @default(uuid())
+  title       String
+  description String?    @db.Text
+  boardId     String     @map("board_id")
+  status      IdeaStatus @default(DRAFT)
+  
+  upvotes     Int        @default(0)
+  
+  createdBy   String     @map("created_by")
+  updatedBy   String?    @map("updated_by")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  board       IdeaBoard        @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  creator     User             @relation("IdeaCreator", fields: [createdBy], references: [id])
+  comments    IdeaComment[]
+  attachments IdeaAttachment[]
+  tags        IdeaTag[]
+
+  @@index([boardId])
+  @@index([status])
+  @@index([createdBy])
+  @@map("ideas")
+}
+
+// Idea attachments
+model IdeaAttachment {
+  id       String @id @default(uuid())
+  ideaId   String @map("idea_id")
+  fileUrl  String @map("file_url")
+  fileName String @map("file_name")
+  fileSize Int?   @map("file_size")
+  mimeType String? @map("mime_type")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  idea Idea @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+
+  @@index([ideaId])
+  @@map("idea_attachments")
+}
+
+// Idea tags
+model IdeaTag {
+  id     String @id @default(uuid())
+  ideaId String @map("idea_id")
+  tag    String
+  
+  idea Idea @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+
+  @@unique([ideaId, tag])
+  @@index([ideaId])
+  @@map("idea_tags")
+}
+
+model IdeaComment {
+  id        String   @id @default(uuid())
+  ideaId    String   @map("idea_id")
+  userId    String   @map("user_id")
+  content   String   @db.Text
+  
+  parentId  String?  @map("parent_id")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  idea      Idea          @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id])
+  parent    IdeaComment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   IdeaComment[] @relation("CommentReplies")
+
+  @@index([ideaId])
+  @@index([userId])
+  @@index([parentId])
+  @@map("idea_comments")
+}
