@@ -7509,6 +7509,7 @@ CREATE TABLE `tm_categories` (
 -- CreateTable
 CREATE TABLE `tm_tasks` (
     `id` VARCHAR(191) NOT NULL,
+    `task_number` INTEGER UNSIGNED NOT NULL,
     `workspace_id` VARCHAR(191) NOT NULL,
     `title` VARCHAR(500) NOT NULL,
     `description` TEXT NULL,
@@ -7516,6 +7517,8 @@ CREATE TABLE `tm_tasks` (
     `priority` ENUM('LOW', 'MEDIUM', 'HIGH', 'URGENT') NOT NULL DEFAULT 'MEDIUM',
     `dueDate` TIMESTAMP(0) NULL,
     `completedAt` TIMESTAMP(0) NULL,
+    `estimated_hours` DECIMAL(8, 2) NULL,
+    `actual_hours` DECIMAL(8, 2) NULL,
     `category_id` VARCHAR(191) NULL,
     `parent_task_id` VARCHAR(191) NULL,
     `group_id` VARCHAR(191) NULL,
@@ -7523,6 +7526,7 @@ CREATE TABLE `tm_tasks` (
     `updated_at` TIMESTAMP(0) NOT NULL,
     `created_by` BIGINT UNSIGNED NOT NULL,
     `updated_by` BIGINT UNSIGNED NULL,
+    `deleted_at` TIMESTAMP(0) NULL,
 
     INDEX `tm_tasks_workspace_id_idx`(`workspace_id`),
     INDEX `tm_tasks_category_id_idx`(`category_id`),
@@ -7532,6 +7536,9 @@ CREATE TABLE `tm_tasks` (
     INDEX `tm_tasks_status_idx`(`status`),
     INDEX `tm_tasks_priority_idx`(`priority`),
     INDEX `tm_tasks_dueDate_idx`(`dueDate`),
+    INDEX `tm_tasks_deleted_at_idx`(`deleted_at`),
+    INDEX `tm_tasks_task_number_idx`(`task_number`),
+    UNIQUE INDEX `tm_tasks_workspace_id_task_number_key`(`workspace_id`, `task_number`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -8427,3 +8434,4 @@ ALTER TABLE `tm_links` ADD CONSTRAINT `tm_links_created_by_fkey` FOREIGN KEY (`c
 
 -- AddForeignKey
 ALTER TABLE `tm_links` ADD CONSTRAINT `tm_links_updated_by_fkey` FOREIGN KEY (`updated_by`) REFERENCES `users`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+

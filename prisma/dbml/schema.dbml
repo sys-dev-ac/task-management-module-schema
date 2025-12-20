@@ -6198,6 +6198,7 @@ Table tm_categories {
 
 Table tm_tasks {
   id String [pk]
+  task_number Int [not null]
   workspace_id String [not null]
   title String [not null]
   description String
@@ -6205,6 +6206,8 @@ Table tm_tasks {
   priority TaskManagementPriority [not null, default: 'MEDIUM']
   dueDate DateTime
   completedAt DateTime
+  estimated_hours Decimal
+  actual_hours Decimal
   category_id String
   parent_task_id String
   group_id String
@@ -6212,6 +6215,7 @@ Table tm_tasks {
   updated_at DateTime [not null]
   created_by BigInt [not null]
   updated_by BigInt
+  deleted_at DateTime
   workspace tm_workspaces [not null]
   category tm_categories
   creator users [not null]
@@ -6227,6 +6231,10 @@ Table tm_tasks {
   assignments tm_task_assignments [not null]
   loops tm_task_loops [not null]
   attachments tm_task_attachments [not null]
+
+  indexes {
+    (workspace_id, task_number) [unique]
+  }
 }
 
 Table tm_task_repeats {
