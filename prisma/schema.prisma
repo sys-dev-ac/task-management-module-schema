@@ -5306,6 +5306,8 @@ model sellers {
   published_on_searchy      Boolean   @default(true)
   agency_id                 BigInt    @default(0) @db.UnsignedBigInt
 
+  workspace   Workspace?
+  
   @@index([shop_name], map: "sellers_shop_name_index")
   @@index([slug], map: "sellers_slug_index")
   @@index([user_id], map: "sellers_user_id_index")
@@ -6874,7 +6876,8 @@ model workbooks {
 
 model Workspace {
   id          String   @id @default(cuid())
-  agency_id   BigInt   @db.UnsignedBigInt
+  agency_id   BigInt?   @db.UnsignedBigInt
+  seller_id   BigInt   @db.UnsignedBigInt @unique 
   name        String
   description String?  @db.Text
   color       String?  @db.VarChar(20)
@@ -6884,7 +6887,8 @@ model Workspace {
   updated_by  BigInt?  @db.UnsignedBigInt
 
   // Relations
-  agency         agencies              @relation(fields: [agency_id], references: [id], onDelete: Cascade)
+  agency         agencies?              @relation(fields: [agency_id], references: [id], onDelete: Cascade)
+  seller         sellers             @relation(fields: [seller_id], references: [id], onDelete: Cascade)
   creator        users                  @relation("WorkspaceCreator", fields: [created_by], references: [id])
   updater        users?                 @relation("WorkspaceUpdater", fields: [updated_by], references: [id])
   members        WorkspaceMember[]

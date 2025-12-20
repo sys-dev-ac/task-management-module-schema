@@ -329,3 +329,29 @@ Agency A  Agency B Agency C Agency D Agency E Agency F
 Sellers   Sellers Sellers   Sellers Sellers  Sellers
    │         │       │         │     │         │
  Staff     Staff   Staff     Staff  Staff    Staff
+ 
+ 
+ Seller
+   ↓ has ONE
+ Workspace
+   ↓ contains
+   ├─ TaskGroups (Projects) ✅
+   │   └─ Tasks belong to groups
+   │
+   ├─ TaskCategories (Categories) ✅
+   │   └─ Tasks belong to categories
+   │
+   ├─ Tasks ✅
+   │   ├─ Can belong to BOTH category AND group
+   │   ├─ Can have sub-tasks (parent_task_id)
+   │   ├─ Can repeat (TaskRepeat)
+   │   ├─ Can have checklist (ChecklistItem)
+   │   ├─ Can have comments (TaskComment)
+   │   ├─ Can have attachments (TaskAttachment)
+   │   ├─ Can have reminders (TaskReminder)
+   │   └─ Has history tracking (TaskHistory)
+   │
+   ├─ IdeaBoards ✅
+   │   └─ Ideas
+   │
+   └─ WorkspaceLinks ✅
