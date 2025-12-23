@@ -6517,6 +6517,7 @@ model users {
   groupMemberships       GroupMembership[]
   boardAccess            BoardAccess[]
   reminderRecipients     ReminderRecipient[]
+  proposals   IdeaProposal[]
 
 
   @@index([agency_id], map: "users_agency_id_index")
@@ -7324,6 +7325,7 @@ model Idea {
   comments    IdeaComment[]
   attachments IdeaAttachment[]
   tags        IdeaTag[]
+  proposals   IdeaProposal[]
 
   @@index([board_id])
   @@index([created_by])
@@ -7375,6 +7377,22 @@ model IdeaComment {
   @@index([user_id])
   @@index([parent_id])
   @@map("tm_idea_comments")
+}
+
+model IdeaProposal {
+  id          String   @id @default(cuid())
+  idea_id     String
+  title       String   @db.VarChar(255)
+  description String?  @db.Text
+  submitted_by BigInt   @db.UnsignedBigInt
+  created_at  DateTime @default(now()) @db.Timestamp(0)
+  updated_at  DateTime @updatedAt @db.Timestamp(0)
+
+  idea Idea @relation(fields: [idea_id], references: [id], onDelete: Cascade)
+  submitter users @relation(fields: [submitted_by], references: [id], onDelete: Cascade)
+
+  @@index([idea_id])
+  @@map("tm_idea_proposals")
 }
 
 // ==========================================

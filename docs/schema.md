@@ -429,6 +429,8 @@
 - **updated_at**: Date and time when last updated
 - **created_by**: User ID who created the idea
 - **updated_by**: User ID who last updated the idea (optional)
+- **assigned_to** : Assign this idea to the developer
+- **proposals** : Proposed solutions array from the team members and the users 
 
 ### Relations
 - **board**: Parent idea board
@@ -484,6 +486,22 @@
 - **parent**: Parent comment (for threaded replies, optional)
 - **replies**: Child comments (threaded replies)
 
+---
+
+---
+
+##  Proposed solutions Table
+**Purpose**: The user can propose  an the solution on this (only used in the internal workspace problems)
+
+- **id**: Unique identifier (UUID)
+- **idea_id**: Reference to Idea table (foreign key)
+- **submitted_by**: Submitted By 
+- **content**: Content of the comment (text)
+- **created_at**: Date and time when created
+- **updated_at**: Date and time when last updated
+
+**Relations**
+- Relaation with the idea record
 ---
 
 ## Link Table

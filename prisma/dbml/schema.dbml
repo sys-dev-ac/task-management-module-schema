@@ -4752,6 +4752,7 @@ Table sellers {
   show_address Boolean [not null, default: false]
   published_on_searchy Boolean [not null, default: true]
   agency_id BigInt [not null, default: 0]
+  workspace tm_workspaces
 }
 
 Table sender_sms {
@@ -6148,7 +6149,8 @@ Table workbooks {
 
 Table tm_workspaces {
   id String [pk]
-  agency_id BigInt [not null]
+  agency_id BigInt
+  seller_id BigInt [unique, not null]
   name String [not null]
   description String
   color String
@@ -6156,7 +6158,8 @@ Table tm_workspaces {
   updated_at DateTime [not null]
   created_by BigInt [not null]
   updated_by BigInt
-  agency agencies [not null]
+  agency agencies
+  seller sellers [not null]
   creator users [not null]
   updater users
   members tm_workspace_members [not null]
@@ -7127,6 +7130,8 @@ Ref: whatsapp_templates.user_id > users.id [delete: Cascade]
 Ref: workbooks.user_id > users.id [delete: Cascade]
 
 Ref: tm_workspaces.agency_id > agencies.id [delete: Cascade]
+
+Ref: tm_workspaces.seller_id - sellers.id [delete: Cascade]
 
 Ref: tm_workspaces.created_by > users.id
 
